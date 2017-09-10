@@ -3,7 +3,7 @@ build:
 	go install
 
 test:
-	go test ./...
+	go test -covermode=atomic -race ./...
 
 run:
 	${GOPATH}/bin/sheep

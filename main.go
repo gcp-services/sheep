@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 
 	"github.com/Cidan/sheep/api"
 	"github.com/Cidan/sheep/database"
@@ -18,8 +19,10 @@ func main() {
 	setupWebserver()
 }
 
+var e *echo.Echo
+
 func setupWebserver() {
-	e := echo.New()
+	e = echo.New()
 	e.Logger.SetOutput(log.Logger)
 
 	e.HideBanner = true
@@ -34,9 +37,18 @@ func setupWebserver() {
 	log.Info().
 		Int("port", 5309).
 		Msg("Starting webserver")
-	e.Logger.Fatal(e.Start(":5309"))
+	err := e.Start(":5309")
+	if strings.Contains(err.Error(), "Server closed") {
+		log.Info().
+			Msg("Server has shutdown.")
+		return
+	}
+	log.Fatal().Err(err)
 }
 
+func stopWebserver() {
+
+}
 func setupLogging() {
 	// If we're in a terminal, pretty print
 	if terminal.IsTerminal(int(os.Stdout.Fd())) {
