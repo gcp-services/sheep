@@ -1,5 +1,5 @@
-hash: 02ac340cad5297c57bae6243965e728ad9318c10828bc8d699964745fca23f01
-updated: 2017-09-10T00:30:35.5073648-07:00
+hash: 613c184f88d9b89baff1032b6a2478bb38d30e348a4a6955217b93da77c053f5
+updated: 2017-09-10T13:48:12.3279184-07:00
 imports:
 - name: cloud.google.com/go
   version: 0f0b8420cb699ac4ce059c63bac263f4301fe95b
@@ -16,6 +16,12 @@ imports:
   version: 941b50ebc6efddf4c41c8e4537a5f68a4e686b24
 - name: github.com/mattn/go-isatty
   version: fc9e8d8ef48496124e79ae0df75490096eccf6fe
+- name: github.com/rs/zerolog
+  version: 3ac71fc58dbd43122668a912b755b0979ba9ce1f
+- name: github.com/stretchr/testify
+  version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
+  subpackages:
+  - assert
 - name: github.com/valyala/bytebufferpool
   version: e746df99fe4a3986f4d4f79e13c1e0117ce9c2f7
 - name: github.com/valyala/fasttemplate
