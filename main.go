@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/Cidan/sheep/api"
+	"github.com/Cidan/sheep/database"
 	"github.com/labstack/echo"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -12,6 +13,12 @@ import (
 
 func main() {
 	setupLogging()
+	database.SetupSpanner()
+	database.SetupPubsub()
+	setupWebserver()
+}
+
+func setupWebserver() {
 	e := echo.New()
 	e.Logger.SetOutput(log.Logger)
 

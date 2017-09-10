@@ -1,10 +1,34 @@
-hash: 613c184f88d9b89baff1032b6a2478bb38d30e348a4a6955217b93da77c053f5
-updated: 2017-09-10T13:48:12.3279184-07:00
+hash: 34f7df15666a60e372934fb9af36bf19eeccd1864eab565d70d19042d3ff9b0d
+updated: 2017-09-10T14:34:07.4411956-07:00
 imports:
 - name: cloud.google.com/go
   version: 0f0b8420cb699ac4ce059c63bac263f4301fe95b
   subpackages:
+  - civil
+  - compute/metadata
+  - iam
+  - internal/atomiccache
+  - internal/fields
+  - internal/version
+  - pubsub
+  - pubsub/apiv1
   - spanner
+- name: github.com/golang/glog
+  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
+- name: github.com/golang/protobuf
+  version: 17ce1425424ab154092bbb43af630bd647f3bb0d
+  subpackages:
+  - proto
+  - protoc-gen-go/descriptor
+  - ptypes
+  - ptypes/any
+  - ptypes/duration
+  - ptypes/empty
+  - ptypes/struct
+  - ptypes/timestamp
+  - ptypes/wrappers
+- name: github.com/googleapis/gax-go
+  version: 8c160ca1523d8eea3932fbaa494c8964b7724aa8
 - name: github.com/labstack/echo
   version: cec7629194fe4bf83b0c72d9a02d340c7a1468ac
 - name: github.com/labstack/gommon
@@ -18,6 +42,9 @@ imports:
   version: fc9e8d8ef48496124e79ae0df75490096eccf6fe
 - name: github.com/rs/zerolog
   version: 3ac71fc58dbd43122668a912b755b0979ba9ce1f
+  subpackages:
+  - internal/json
+  - log
 - name: github.com/stretchr/testify
   version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:
@@ -31,8 +58,100 @@ imports:
   subpackages:
   - acme
   - acme/autocert
+  - ssh/terminal
+- name: golang.org/x/net
+  version: 66aacef3dd8a676686c7ae3716979581e8b03c47
+  subpackages:
+  - context
+  - context/ctxhttp
+  - http2
+  - http2/hpack
+  - idna
+  - internal/timeseries
+  - lex/httplex
+  - trace
+- name: golang.org/x/oauth2
+  version: d89af98d7c6bba047c5a2622f36bc14b8766df85
+  subpackages:
+  - google
+  - internal
+  - jws
+  - jwt
+- name: golang.org/x/sync
+  version: f52d1811a62927559de87708c8913c1650ce4f26
+  subpackages:
+  - errgroup
+  - semaphore
 - name: golang.org/x/sys
   version: a5054c7c1385fd50d9394475365355a87a7873ec
   subpackages:
   - unix
+  - windows
+- name: golang.org/x/text
+  version: bd91bbf73e9a4a801adbfb97133c992678533126
+  subpackages:
+  - secure/bidirule
+  - transform
+  - unicode/bidi
+  - unicode/norm
+- name: google.golang.org/api
+  version: b6a02105ec5a446209e9d38557f0e1ac30cacf82
+  subpackages:
+  - googleapi/transport
+  - internal
+  - iterator
+  - option
+  - support/bundler
+  - transport
+  - transport/grpc
+  - transport/http
+- name: google.golang.org/appengine
+  version: 150dc57a1b433e64154302bdc40b6bb8aefa313a
+  subpackages:
+  - internal
+  - internal/app_identity
+  - internal/base
+  - internal/datastore
+  - internal/log
+  - internal/modules
+  - internal/remote_api
+  - internal/socket
+  - internal/urlfetch
+  - socket
+  - urlfetch
+- name: google.golang.org/genproto
+  version: 595979c8a7bf586b2d293fb42246bf91a0b893d9
+  subpackages:
+  - googleapis/api
+  - googleapis/api/annotations
+  - googleapis/api/label
+  - googleapis/api/metric
+  - googleapis/api/monitoredres
+  - googleapis/api/serviceconfig
+  - googleapis/iam/v1
+  - googleapis/pubsub/v1
+  - googleapis/rpc/errdetails
+  - googleapis/rpc/status
+  - googleapis/spanner/v1
+  - protobuf/api
+  - protobuf/field_mask
+  - protobuf/ptype
+  - protobuf/source_context
+- name: google.golang.org/grpc
+  version: 42c095b6c9bdd80d4435b064508c398afdb0ec99
+  subpackages:
+  - codes
+  - credentials
+  - credentials/oauth
+  - grpclb/grpc_lb_v1
+  - grpclog
+  - internal
+  - keepalive
+  - metadata
+  - naming
+  - peer
+  - stats
+  - status
+  - tap
+  - transport
 testImports: []
