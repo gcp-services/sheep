@@ -14,8 +14,17 @@ import (
 
 func main() {
 	setupLogging()
-	database.SetupSpanner()
-	database.SetupPubsub()
+
+	err := database.SetupSpanner()
+	if err != nil {
+		log.Panic().Err(err).Msg("Could not start Spanner connection")
+	}
+
+	err = database.SetupPubsub()
+	if err != nil {
+		log.Panic().Err(err).Msg("Could not start Pubsub connection")
+	}
+
 	setupWebserver()
 }
 
