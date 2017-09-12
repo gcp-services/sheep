@@ -1,34 +1,59 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
 	"github.com/Cidan/sheep/api"
+	"github.com/Cidan/sheep/config"
 	"github.com/Cidan/sheep/database"
 	"github.com/labstack/echo"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh/terminal"
 )
 
+var e *echo.Echo
+
 func main() {
 	setupLogging()
-
-	err := database.SetupSpanner()
-	if err != nil {
-		log.Panic().Err(err).Msg("Could not start Spanner connection")
-	}
-
-	err = database.SetupPubsub()
-	if err != nil {
-		log.Panic().Err(err).Msg("Could not start Pubsub connection")
-	}
-
+	config.Setup()
+	setupQueue()
+	setupDatabase()
 	setupWebserver()
 }
 
-var e *echo.Echo
+func setupDatabase() error {
+	if viper.GetBool("cockroachdb.enabled") {
+		return nil
+	}
+
+	if viper.GetBool("spanner.enabled") {
+		err := database.SetupSpanner()
+		if err != nil {
+			log.Panic().Err(err).Msg("Could not start Spanner connection")
+		}
+	}
+
+	return fmt.Errorf("no database enabled")
+}
+
+func setupQueue() error {
+	if viper.GetBool("rabbitmq.enabled") {
+		return nil
+	}
+
+	if viper.GetBool("pubsub.enabled") {
+		err := database.SetupPubsub()
+		if err != nil {
+			log.Panic().Err(err).Msg("Could not start Pubsub connection")
+		}
+	}
+
+	return fmt.Errorf("no queue setup")
+}
 
 func setupWebserver() {
 	e = echo.New()

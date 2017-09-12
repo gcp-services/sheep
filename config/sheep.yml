@@ -1,0 +1,10 @@
+# Example and test config.
+rabbitmq:
+  enabled: true
+  hosts:
+    - amqp://localhost
+    - amqp://localhost
+  queue: "sheep"
+  
+cockroachdb:
+  enabled: true

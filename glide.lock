@@ -1,5 +1,5 @@
-hash: 34f7df15666a60e372934fb9af36bf19eeccd1864eab565d70d19042d3ff9b0d
-updated: 2017-09-10T14:34:07.4411956-07:00
+hash: 38e50d4e37ad5c4a328f2bef89915ec4a695d745931088b1ae7fca95d50f144e
+updated: 2017-09-11T19:34:18.28473-07:00
 imports:
 - name: cloud.google.com/go
   version: 0f0b8420cb699ac4ce059c63bac263f4301fe95b
@@ -10,9 +10,14 @@ imports:
   - internal/atomiccache
   - internal/fields
   - internal/version
+  - longrunning
+  - longrunning/autogen
   - pubsub
   - pubsub/apiv1
   - spanner
+  - spanner/admin/database/apiv1
+- name: github.com/fsnotify/fsnotify
+  version: 629574ca2a5df945712d3079857300b5e4da0236
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/protobuf
@@ -29,6 +34,17 @@ imports:
   - ptypes/wrappers
 - name: github.com/googleapis/gax-go
   version: 8c160ca1523d8eea3932fbaa494c8964b7724aa8
+- name: github.com/hashicorp/hcl
+  version: 8f6b1344a92ff8877cf24a5de9177bf7d0a2a187
+  subpackages:
+  - hcl/ast
+  - hcl/parser
+  - hcl/scanner
+  - hcl/strconv
+  - hcl/token
+  - json/parser
+  - json/scanner
+  - json/token
 - name: github.com/labstack/echo
   version: cec7629194fe4bf83b0c72d9a02d340c7a1468ac
 - name: github.com/labstack/gommon
@@ -36,15 +52,37 @@ imports:
   subpackages:
   - color
   - log
+- name: github.com/magiconair/properties
+  version: f917359f079a3759162704eaa8caeec3d01d9f91
 - name: github.com/mattn/go-colorable
   version: 941b50ebc6efddf4c41c8e4537a5f68a4e686b24
 - name: github.com/mattn/go-isatty
   version: fc9e8d8ef48496124e79ae0df75490096eccf6fe
+- name: github.com/mitchellh/mapstructure
+  version: d0303fe809921458f417bcf828397a65db30a7e4
+- name: github.com/pelletier/go-buffruneio
+  version: c37440a7cf42ac63b919c752ca73a85067e05992
+- name: github.com/pelletier/go-toml
+  version: 5ccdfb18c776b740aecaf085c4d9a2779199c279
 - name: github.com/rs/zerolog
   version: 3ac71fc58dbd43122668a912b755b0979ba9ce1f
   subpackages:
   - internal/json
   - log
+- name: github.com/spf13/afero
+  version: ee1bd8ee15a1306d1f9201acc41ef39cd9f99a1b
+  subpackages:
+  - mem
+- name: github.com/spf13/cast
+  version: acbeb36b902d72a7a4c18e8f3241075e7ab763e4
+- name: github.com/spf13/jwalterweatherman
+  version: 12bd96e66386c1960ab0f74ced1362f66f552f7b
+- name: github.com/spf13/pflag
+  version: 7aff26db30c1be810f9de5038ec5ef96ac41fd7c
+- name: github.com/spf13/viper
+  version: 25b30aa063fc18e48662b86996252eabdcf2f0c7
+- name: github.com/streadway/amqp
+  version: afe8eee29a74d213b1f3fb2586058157c397da60
 - name: github.com/stretchr/testify
   version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:
@@ -54,7 +92,7 @@ imports:
 - name: github.com/valyala/fasttemplate
   version: dcecefd839c4193db0d35b88ec65b4c12d360ab0
 - name: golang.org/x/crypto
-  version: 9ba3862cf6a5452ae579de98f9364dd2e544844c
+  version: 74b34b9dd60829a9fcaf56a59e81c3877a8ecd2c
   subpackages:
   - acme
   - acme/autocert
@@ -95,7 +133,7 @@ imports:
   - unicode/bidi
   - unicode/norm
 - name: google.golang.org/api
-  version: b6a02105ec5a446209e9d38557f0e1ac30cacf82
+  version: 6d17a978cb363067e40a571c7cd7ddc010af35b0
   subpackages:
   - googleapi/transport
   - internal
@@ -129,9 +167,11 @@ imports:
   - googleapis/api/monitoredres
   - googleapis/api/serviceconfig
   - googleapis/iam/v1
+  - googleapis/longrunning
   - googleapis/pubsub/v1
   - googleapis/rpc/errdetails
   - googleapis/rpc/status
+  - googleapis/spanner/admin/database/v1
   - googleapis/spanner/v1
   - protobuf/api
   - protobuf/field_mask
@@ -154,4 +194,14 @@ imports:
   - status
   - tap
   - transport
-testImports: []
+- name: gopkg.in/yaml.v2
+  version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
+testImports:
+- name: github.com/davecgh/go-spew
+  version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9
+  subpackages:
+  - spew
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
