@@ -12,7 +12,7 @@ func setDefaults() {
 	viper.SetDefault("cockroachdb.enabled", false)
 }
 
-func Setup() {
+func Setup(path string) {
 	viper.SetConfigType("yaml")
 	viper.SetConfigName("sheep")
 
@@ -20,6 +20,9 @@ func Setup() {
 	viper.AddConfigPath("./config")
 	viper.AddConfigPath("$HOME/")
 	viper.AddConfigPath("/etc/sheep/")
+	if path != "" {
+		viper.AddConfigPath(path)
+	}
 	setDefaults()
 
 	err := viper.ReadInConfig()

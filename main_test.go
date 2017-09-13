@@ -19,11 +19,11 @@ func TestSetupWebserver(t *testing.T) {
 }
 
 func TestSetupDatabase(t *testing.T) {
-	config.Setup()
+	config.Setup("")
 	assert.Nil(t, setupDatabase())
 }
 
 func TestSetupQueue(t *testing.T) {
-	config.Setup()
+	config.Setup("")
 	assert.Nil(t, setupQueue())
 }

@@ -5,5 +5,5 @@ import (
 )
 
 func TestSetup(t *testing.T) {
-	Setup()
+	Setup("")
 }

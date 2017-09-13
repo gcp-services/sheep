@@ -19,7 +19,7 @@ var e *echo.Echo
 
 func main() {
 	setupLogging()
-	config.Setup()
+	config.Setup("")
 	setupQueue()
 	setupDatabase()
 	setupWebserver()
