@@ -46,10 +46,6 @@ func newConnection(host string) *Connection {
 func (c *Connection) dial() {
 	connection, err := amqp.Dial(c.host)
 	if err != nil {
-		log.Error().
-			Err(err).
-			Str("host", c.host).
-			Msg("could not connect to rabbitmq")
 		c.errors <- &amqp.Error{
 			Reason: err.Error(),
 		}
@@ -61,7 +57,11 @@ func (c *Connection) dial() {
 
 // watch a connection handler
 func (c *Connection) watch() {
-	<-c.errors
+	err := <-c.errors
+	log.Error().
+		Err(err).
+		Str("host", c.host).
+		Msg("error on rabbitmq connection")
 	// Everything is invalid, reboot.
 	c.reset()
 	<-time.After(time.Second * 3)
