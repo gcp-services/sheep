@@ -28,6 +28,6 @@ func (p *Pubsub) Read() {
 
 }
 
-func (p *Pubsub) Save() {
-
+func (p *Pubsub) Save(message *Message) error {
+	return nil
 }
