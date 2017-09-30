@@ -7,4 +7,10 @@ rabbitmq:
   queue: "sheep"
   
 cockroachdb:
+  enabled: false
+
+spanner:
   enabled: true
+  project: test
+  instance: sheep-test
+  database: test

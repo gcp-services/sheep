@@ -19,17 +19,13 @@ type RabbitMQ struct {
 	connections []*Connection
 }
 
-func SetupRabbitMQ() {
+func NewRabbitMQ() (*RabbitMQ, error) {
 	hosts := viper.GetStringSlice("rabbitmq.hosts")
-	NewRabbitMQ(hosts)
-}
-
-func NewRabbitMQ(hosts []string) *RabbitMQ {
 	rmq := &RabbitMQ{}
 	for _, host := range hosts {
 		rmq.connections = append(rmq.connections, newConnection(host))
 	}
-	return rmq
+	return rmq, nil
 }
 
 func newConnection(host string) *Connection {

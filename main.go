@@ -20,42 +20,54 @@ var e *echo.Echo
 func main() {
 	setupLogging()
 	config.Setup("")
-	setupQueue()
-	setupDatabase()
-	setupWebserver()
+	stream, err := setupQueue()
+	if err != nil {
+		log.Panic().Err(err).Msg("Could not setup queue")
+	}
+	database, err := setupDatabase()
+	if err != nil {
+		log.Panic().Err(err).Msg("Could not setup database")
+	}
+	setupWebserver(stream, database)
 }
 
-func setupDatabase() error {
+func setupDatabase() (database.Database, error) {
 	if viper.GetBool("cockroachdb.enabled") {
-		return nil
+		return nil, nil
 	}
 
 	if viper.GetBool("spanner.enabled") {
-		err := database.SetupSpanner()
+		client, err := database.NewSpanner(
+			viper.GetString("spanner.project"),
+			viper.GetString("spanner.instance"),
+			viper.GetString("spanner.database"),
+		)
 		if err != nil {
 			log.Panic().Err(err).Msg("Could not start Spanner connection")
 		}
+		return client, err
 	}
 
-	return fmt.Errorf("no database enabled")
+	return nil, fmt.Errorf("no database enabled")
 }
 
-func setupQueue() error {
+func setupQueue() (database.Stream, error) {
 	if viper.GetBool("rabbitmq.enabled") {
-		return nil
+		return nil, nil
 	}
 
 	if viper.GetBool("pubsub.enabled") {
-		err := database.SetupPubsub()
+		pubsub, err := database.NewPubsub()
 		if err != nil {
 			log.Panic().Err(err).Msg("Could not start Pubsub connection")
 		}
+		return pubsub, err
 	}
 
-	return fmt.Errorf("no queue setup")
+	return nil, fmt.Errorf("no queue setup")
 }
 
-func setupWebserver() {
+func setupWebserver(stream database.Stream, database database.Database) {
 	e = echo.New()
 	e.Logger.SetOutput(log.Logger)
 

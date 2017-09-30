@@ -1,9 +1,14 @@
 package api
 
-import "github.com/labstack/echo"
+import (
+	"github.com/Cidan/sheep/database"
+	"github.com/labstack/echo"
+)
 
 type Handler struct {
-	Version string
+	Version  string
+	Database *database.Database
+	Stream   *database.Stream
 }
 
 func New() *Handler {

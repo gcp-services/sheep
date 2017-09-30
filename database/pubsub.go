@@ -7,18 +7,27 @@ import (
 	"cloud.google.com/go/pubsub"
 )
 
-// Pubsub global client
-var Pubsub *pubsub.Client
+type Pubsub struct {
+	client *pubsub.Client
+}
 
 // SetupPubsub global client
-func SetupPubsub() error {
+func NewPubsub() (*Pubsub, error) {
 	client, err := pubsub.NewClient(context.Background(),
 		os.Getenv("SHEEP_PROJECT"))
 
 	if err != nil {
-		return err
+		return nil, err
 	}
+	return &Pubsub{
+		client: client,
+	}, nil
+}
 
-	Pubsub = client
-	return nil
+func (p *Pubsub) Read() {
+
+}
+
+func (p *Pubsub) Save() {
+
 }
