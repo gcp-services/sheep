@@ -3,7 +3,7 @@ import:
 - package: github.com/labstack/echo
   version: ~3.2.3
 - package: cloud.google.com/go
-  version: ~0.12.0
+  version: ~0.14.0
   subpackages:
   - spanner
   - pubsub
@@ -16,3 +16,5 @@ import:
 - package: github.com/streadway/amqp
 - package: github.com/spf13/viper
   version: ~1.0.0
+- package: github.com/satori/go.uuid
+  version: ~1.1.0

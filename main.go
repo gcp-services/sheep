@@ -79,7 +79,7 @@ func setupWebserver(stream database.Stream, database database.Database) {
 	})
 
 	// Create our v1 API
-	v1 := api.New()
+	v1 := api.New(&stream, &database)
 	v1.Register(e)
 	log.Info().
 		Int("port", 5309).

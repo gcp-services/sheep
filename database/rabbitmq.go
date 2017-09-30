@@ -42,7 +42,7 @@ func (r *RabbitMQ) Save(message *Message) error {
 	if err != nil {
 		return err
 	}
-	err = r.connections[0].Channels[0].Channel.Publish("sheep", "message", true, true, amqp.Publishing{
+	err = r.connections[0].Channels[0].Channel.Publish("sheep", "message", true, false, amqp.Publishing{
 		DeliveryMode: amqp.Persistent,
 		Timestamp:    time.Now(),
 		Body:         data,
@@ -122,5 +122,6 @@ func newChannel(c *Connection) *Channel {
 		Channel: channel,
 	}
 	ch.Channel.NotifyClose(c.errors)
+	channel.ExchangeDeclare("sheep", "direct", true, true, false, true, nil)
 	return ch
 }

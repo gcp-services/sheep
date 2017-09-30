@@ -1,8 +1,8 @@
-hash: 38e50d4e37ad5c4a328f2bef89915ec4a695d745931088b1ae7fca95d50f144e
-updated: 2017-09-11T19:34:18.28473-07:00
+hash: 9e665ddd4dbd9b6203ef9c37a176e9c23de441b06b43cbfe9820d3fc2b37334b
+updated: 2017-09-30T15:55:34.9786872-07:00
 imports:
 - name: cloud.google.com/go
-  version: 0f0b8420cb699ac4ce059c63bac263f4301fe95b
+  version: f6de2c509ed9d2af648c3c147207eaaf97149aed
   subpackages:
   - civil
   - compute/metadata
@@ -21,7 +21,7 @@ imports:
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/protobuf
-  version: 17ce1425424ab154092bbb43af630bd647f3bb0d
+  version: 130e6b02ab059e7b717a096f397c5b60111cae74
   subpackages:
   - proto
   - protoc-gen-go/descriptor
@@ -35,7 +35,7 @@ imports:
 - name: github.com/googleapis/gax-go
   version: 8c160ca1523d8eea3932fbaa494c8964b7724aa8
 - name: github.com/hashicorp/hcl
-  version: 8f6b1344a92ff8877cf24a5de9177bf7d0a2a187
+  version: 68e816d1c783414e79bc65b3994d9ab6b0a722ab
   subpackages:
   - hcl/ast
   - hcl/parser
@@ -69,6 +69,8 @@ imports:
   subpackages:
   - internal/json
   - log
+- name: github.com/satori/go.uuid
+  version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: github.com/spf13/afero
   version: ee1bd8ee15a1306d1f9201acc41ef39cd9f99a1b
   subpackages:
@@ -78,7 +80,7 @@ imports:
 - name: github.com/spf13/jwalterweatherman
   version: 12bd96e66386c1960ab0f74ced1362f66f552f7b
 - name: github.com/spf13/pflag
-  version: 7aff26db30c1be810f9de5038ec5ef96ac41fd7c
+  version: 5c2d607c75df0540c877524f9e82d3edb7748668
 - name: github.com/spf13/viper
   version: 25b30aa063fc18e48662b86996252eabdcf2f0c7
 - name: github.com/streadway/amqp
@@ -92,13 +94,13 @@ imports:
 - name: github.com/valyala/fasttemplate
   version: dcecefd839c4193db0d35b88ec65b4c12d360ab0
 - name: golang.org/x/crypto
-  version: 74b34b9dd60829a9fcaf56a59e81c3877a8ecd2c
+  version: 9419663f5a44be8b34ca85f08abc5fe1be11f8a3
   subpackages:
   - acme
   - acme/autocert
   - ssh/terminal
 - name: golang.org/x/net
-  version: 66aacef3dd8a676686c7ae3716979581e8b03c47
+  version: 0a9397675ba34b2845f758fe3cd68828369c6517
   subpackages:
   - context
   - context/ctxhttp
@@ -109,31 +111,31 @@ imports:
   - lex/httplex
   - trace
 - name: golang.org/x/oauth2
-  version: d89af98d7c6bba047c5a2622f36bc14b8766df85
+  version: bb50c06baba3d0c76f9d125c0719093e315b5b44
   subpackages:
   - google
   - internal
   - jws
   - jwt
 - name: golang.org/x/sync
-  version: f52d1811a62927559de87708c8913c1650ce4f26
+  version: 8e0aa688b654ef28caa72506fa5ec8dba9fc7690
   subpackages:
   - errgroup
   - semaphore
 - name: golang.org/x/sys
-  version: a5054c7c1385fd50d9394475365355a87a7873ec
+  version: 314a259e304ff91bd6985da2a7149bbf91237993
   subpackages:
   - unix
   - windows
 - name: golang.org/x/text
-  version: bd91bbf73e9a4a801adbfb97133c992678533126
+  version: 1cbadb444a806fd9430d14ad08967ed91da4fa0a
   subpackages:
   - secure/bidirule
   - transform
   - unicode/bidi
   - unicode/norm
 - name: google.golang.org/api
-  version: 6d17a978cb363067e40a571c7cd7ddc010af35b0
+  version: 906273f42cdebd65de3a53f30dd9e23de1b55ba9
   subpackages:
   - googleapi/transport
   - internal
@@ -158,7 +160,7 @@ imports:
   - socket
   - urlfetch
 - name: google.golang.org/genproto
-  version: 595979c8a7bf586b2d293fb42246bf91a0b893d9
+  version: 1e559d0a00eef8a9a43151db4665280bd8dd5886
   subpackages:
   - googleapis/api
   - googleapis/api/annotations
