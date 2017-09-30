@@ -8,5 +8,5 @@ import (
 
 func TestSetupRabbitMQ(t *testing.T) {
 	config.Setup("../config/")
-	SetupRabbitMQ()
+	NewRabbitMQ()
 }

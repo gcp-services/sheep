@@ -7,10 +7,13 @@ rabbitmq:
   queue: "sheep"
   
 cockroachdb:
+  enabled: true
+
+pubsub:
   enabled: false
 
 spanner:
-  enabled: true
+  enabled: false
   project: test
   instance: sheep-test
   database: test
