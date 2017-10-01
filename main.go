@@ -33,19 +33,23 @@ func main() {
 
 func setupDatabase() (database.Database, error) {
 	if viper.GetBool("cockroachdb.enabled") {
-		return nil, nil
+		return database.NewCockroachDB(
+			viper.GetString("cockroachdb.host"),
+			viper.GetString("cockroachdb.username"),
+			viper.GetString("cockroachdb.password"),
+			viper.GetString("cockroachdb.dbname"),
+			viper.GetString("cockroachdb.sslmode"),
+			viper.GetInt("cockroachdb.port"),
+		)
 	}
 
 	if viper.GetBool("spanner.enabled") {
-		client, err := database.NewSpanner(
+		return database.NewSpanner(
 			viper.GetString("spanner.project"),
 			viper.GetString("spanner.instance"),
 			viper.GetString("spanner.database"),
 		)
-		if err != nil {
-			log.Panic().Err(err).Msg("Could not start Spanner connection")
-		}
-		return client, err
+
 	}
 
 	return nil, fmt.Errorf("no database enabled")
@@ -53,16 +57,11 @@ func setupDatabase() (database.Database, error) {
 
 func setupQueue() (database.Stream, error) {
 	if viper.GetBool("rabbitmq.enabled") {
-		rmq, err := database.NewRabbitMQ()
-		return rmq, err
+		return database.NewRabbitMQ()
 	}
 
 	if viper.GetBool("pubsub.enabled") {
-		pubsub, err := database.NewPubsub()
-		if err != nil {
-			log.Panic().Err(err).Msg("Could not start Pubsub connection")
-		}
-		return pubsub, err
+		return database.NewPubsub()
 	}
 
 	return nil, fmt.Errorf("no queue setup")

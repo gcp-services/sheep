@@ -8,6 +8,11 @@ rabbitmq:
   
 cockroachdb:
   enabled: true
+  host: localhost
+  username: root
+  port: 26257
+  sslmode: disable
+  dbname: sheep
 
 pubsub:
   enabled: false

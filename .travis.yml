@@ -1,6 +1,14 @@
 language: go
 go:
   - 1.9.x
+
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker run -p 8080:8080 -p 26257:26257 --name cdb --rm cockroachdb/cockroach:v1.0.6 start --insecure --host=0.0.0.0
 install:
   - go get -v github.com/Masterminds/glide
   - cd $GOPATH/src/github.com/Masterminds/glide && git checkout 245caced2b16358b1c5e267691b17e9ee9952127 && go install && cd -

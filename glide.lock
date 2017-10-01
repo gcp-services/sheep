@@ -1,5 +1,5 @@
-hash: 9e665ddd4dbd9b6203ef9c37a176e9c23de441b06b43cbfe9820d3fc2b37334b
-updated: 2017-09-30T15:55:34.9786872-07:00
+hash: 00fe4633928aba918b9324709b709f6c9c75f782b17b3ae5c5c4d6defedd5dc8
+updated: 2017-09-30T18:30:12.2594101-07:00
 imports:
 - name: cloud.google.com/go
   version: f6de2c509ed9d2af648c3c147207eaaf97149aed
@@ -52,6 +52,8 @@ imports:
   subpackages:
   - color
   - log
+- name: github.com/lib/pq
+  version: b77235e3890a962fe8a6f8c4c7198679ca7814e7
 - name: github.com/magiconair/properties
   version: f917359f079a3759162704eaa8caeec3d01d9f91
 - name: github.com/mattn/go-colorable
