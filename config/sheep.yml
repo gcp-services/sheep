@@ -16,6 +16,7 @@ cockroachdb:
 
 pubsub:
   enabled: false
+  project: test
 
 spanner:
   enabled: false
