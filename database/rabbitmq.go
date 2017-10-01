@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
 	"github.com/streadway/amqp"
 )
 
@@ -24,8 +23,7 @@ type RabbitMQ struct {
 	connections []*Connection
 }
 
-func NewRabbitMQ() (*RabbitMQ, error) {
-	hosts := viper.GetStringSlice("rabbitmq.hosts")
+func NewRabbitMQ(hosts []string) (*RabbitMQ, error) {
 	rmq := &RabbitMQ{}
 	for _, host := range hosts {
 		rmq.connections = append(rmq.connections, newConnection(host))

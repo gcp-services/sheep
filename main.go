@@ -57,11 +57,15 @@ func setupDatabase() (database.Database, error) {
 
 func setupQueue() (database.Stream, error) {
 	if viper.GetBool("rabbitmq.enabled") {
-		return database.NewRabbitMQ()
+		return database.NewRabbitMQ(
+			viper.GetStringSlice("rabbitmq.hosts"),
+		)
 	}
 
 	if viper.GetBool("pubsub.enabled") {
-		return database.NewPubsub()
+		return database.NewPubsub(
+			viper.GetString("pubsub.project"),
+		)
 	}
 
 	return nil, fmt.Errorf("no queue setup")

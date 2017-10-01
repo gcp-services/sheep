@@ -3,10 +3,10 @@ package database
 import (
 	"testing"
 
-	"github.com/Cidan/sheep/config"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSetupRabbitMQ(t *testing.T) {
-	config.Setup("../config/")
-	NewRabbitMQ()
+	_, err := NewRabbitMQ([]string{"amqp://localhost", "amqp://localhost"})
+	assert.Nil(t, err)
 }
