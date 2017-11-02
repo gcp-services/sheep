@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -33,14 +34,17 @@ func main() {
 
 func setupDatabase() (database.Database, error) {
 	if viper.GetBool("cockroachdb.enabled") {
-		return database.NewCockroachDB(
-			viper.GetString("cockroachdb.host"),
-			viper.GetString("cockroachdb.username"),
-			viper.GetString("cockroachdb.password"),
-			viper.GetString("cockroachdb.dbname"),
-			viper.GetString("cockroachdb.sslmode"),
-			viper.GetInt("cockroachdb.port"),
-		)
+		return nil, errors.New("CockroachDB support is not ready")
+		/*
+			return database.NewCockroachDB(
+				viper.GetString("cockroachdb.host"),
+				viper.GetString("cockroachdb.username"),
+				viper.GetString("cockroachdb.password"),
+				viper.GetString("cockroachdb.dbname"),
+				viper.GetString("cockroachdb.sslmode"),
+				viper.GetInt("cockroachdb.port"),
+			)
+		*/
 	}
 
 	if viper.GetBool("spanner.enabled") {
@@ -49,7 +53,6 @@ func setupDatabase() (database.Database, error) {
 			viper.GetString("spanner.instance"),
 			viper.GetString("spanner.database"),
 		)
-
 	}
 
 	return nil, fmt.Errorf("no database enabled")
@@ -57,14 +60,18 @@ func setupDatabase() (database.Database, error) {
 
 func setupQueue() (database.Stream, error) {
 	if viper.GetBool("rabbitmq.enabled") {
-		return database.NewRabbitMQ(
-			viper.GetStringSlice("rabbitmq.hosts"),
-		)
+		return nil, errors.New("RabbitMQ support is not ready")
+		/*
+			return database.NewRabbitMQ(
+				viper.GetStringSlice("rabbitmq.hosts"),
+			)
+		*/
 	}
 
 	if viper.GetBool("pubsub.enabled") {
 		return database.NewPubsub(
 			viper.GetString("pubsub.project"),
+			viper.GetString("pubsub.topic"),
 		)
 	}
 

@@ -1,13 +1,13 @@
 # Example and test config.
 rabbitmq:
-  enabled: true
+  enabled: false
   hosts:
     - amqp://localhost
     - amqp://localhost
   queue: "sheep"
   
 cockroachdb:
-  enabled: true
+  enabled: false
   host: localhost
   username: root
   port: 26257
@@ -15,11 +15,12 @@ cockroachdb:
   dbname: sheep
 
 pubsub:
-  enabled: false
-  project: test
+  enabled: true
+  project: lobato-dude
+  topic: sheep
 
 spanner:
-  enabled: false
-  project: test
+  enabled: true
+  project: lobato-dude
   instance: sheep-test
   database: test
