@@ -2,7 +2,7 @@ package database
 
 type Stream interface {
 	Save(*Message) error
-	Read()
+	Read() (chan *Message, error)
 }
 
 type Database interface {

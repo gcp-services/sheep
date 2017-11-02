@@ -31,8 +31,9 @@ func NewRabbitMQ(hosts []string) (*RabbitMQ, error) {
 	return rmq, nil
 }
 
-func (r *RabbitMQ) Read() {
-
+// Create a channel for reading from RabbitMQ
+func (r *RabbitMQ) Read() (chan *Message, error) {
+	return nil, nil
 }
 
 func (r *RabbitMQ) Save(message *Message) error {
@@ -40,6 +41,7 @@ func (r *RabbitMQ) Save(message *Message) error {
 	if err != nil {
 		return err
 	}
+	// TODO: pick at random, check for no connections
 	err = r.connections[0].Channels[0].Channel.Publish("sheep", "message", true, false, amqp.Publishing{
 		DeliveryMode: amqp.Persistent,
 		Timestamp:    time.Now(),

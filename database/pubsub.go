@@ -22,8 +22,8 @@ func NewPubsub(project string) (*Pubsub, error) {
 	}, nil
 }
 
-func (p *Pubsub) Read() {
-
+func (p *Pubsub) Read() (chan *Message, error) {
+	return nil, nil
 }
 
 func (p *Pubsub) Save(message *Message) error {

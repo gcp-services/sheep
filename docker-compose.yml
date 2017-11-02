@@ -10,3 +10,8 @@ services:
       - "26257:26257"
     image: "cockroachdb/cockroach:v1.0.6"
     command: "start --insecure --host=0.0.0.0"
+  rabbitmq:
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    image: "rabbitmq:management"

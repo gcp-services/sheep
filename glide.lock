@@ -1,5 +1,5 @@
 hash: 00fe4633928aba918b9324709b709f6c9c75f782b17b3ae5c5c4d6defedd5dc8
-updated: 2017-09-30T18:30:12.2594101-07:00
+updated: 2017-11-02T08:46:51.534130453-07:00
 imports:
 - name: cloud.google.com/go
   version: f6de2c509ed9d2af648c3c147207eaaf97149aed
@@ -17,11 +17,11 @@ imports:
   - spanner
   - spanner/admin/database/apiv1
 - name: github.com/fsnotify/fsnotify
-  version: 629574ca2a5df945712d3079857300b5e4da0236
+  version: 4da3e2cfbabc9f751898f250b49f2439785783a1
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/protobuf
-  version: 130e6b02ab059e7b717a096f397c5b60111cae74
+  version: 1643683e1b54a9e88ad26d98f81400c8c9d9f4f9
   subpackages:
   - proto
   - protoc-gen-go/descriptor
@@ -31,11 +31,10 @@ imports:
   - ptypes/empty
   - ptypes/struct
   - ptypes/timestamp
-  - ptypes/wrappers
 - name: github.com/googleapis/gax-go
-  version: 8c160ca1523d8eea3932fbaa494c8964b7724aa8
+  version: 317e0006254c44a0ac427cc52a0e083ff0b9622f
 - name: github.com/hashicorp/hcl
-  version: 68e816d1c783414e79bc65b3994d9ab6b0a722ab
+  version: 23c074d0eceb2b8a5bfdbb271ab780cde70f05a8
   subpackages:
   - hcl/ast
   - hcl/parser
@@ -48,24 +47,24 @@ imports:
 - name: github.com/labstack/echo
   version: cec7629194fe4bf83b0c72d9a02d340c7a1468ac
 - name: github.com/labstack/gommon
-  version: 1121fd3e243c202482226a7afe4dcd07ffc4139a
+  version: 57409ada9da0f2afad6664c49502f8c50fbd8476
   subpackages:
   - color
   - log
 - name: github.com/lib/pq
-  version: b77235e3890a962fe8a6f8c4c7198679ca7814e7
+  version: b609790bd85edf8e9ab7e0f8912750a786177bcf
+  subpackages:
+  - oid
 - name: github.com/magiconair/properties
-  version: f917359f079a3759162704eaa8caeec3d01d9f91
+  version: 49d762b9817ba1c2e9d0c69183c2b4a8b8f1d934
 - name: github.com/mattn/go-colorable
-  version: 941b50ebc6efddf4c41c8e4537a5f68a4e686b24
+  version: ad5389df28cdac544c99bd7b9161a0b5b6ca9d1b
 - name: github.com/mattn/go-isatty
-  version: fc9e8d8ef48496124e79ae0df75490096eccf6fe
+  version: a5cdd64afdee435007ee3e9f6ed4684af949d568
 - name: github.com/mitchellh/mapstructure
-  version: d0303fe809921458f417bcf828397a65db30a7e4
-- name: github.com/pelletier/go-buffruneio
-  version: c37440a7cf42ac63b919c752ca73a85067e05992
+  version: 06020f85339e21b2478f756a78e295255ffa4d6a
 - name: github.com/pelletier/go-toml
-  version: 5ccdfb18c776b740aecaf085c4d9a2779199c279
+  version: 4e9e0ee19b60b13eb79915933f44d8ed5f268bdd
 - name: github.com/rs/zerolog
   version: 3ac71fc58dbd43122668a912b755b0979ba9ce1f
   subpackages:
@@ -74,7 +73,7 @@ imports:
 - name: github.com/satori/go.uuid
   version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: github.com/spf13/afero
-  version: ee1bd8ee15a1306d1f9201acc41ef39cd9f99a1b
+  version: 5660eeed305fe5f69c8fc6cf899132a459a97064
   subpackages:
   - mem
 - name: github.com/spf13/cast
@@ -82,11 +81,11 @@ imports:
 - name: github.com/spf13/jwalterweatherman
   version: 12bd96e66386c1960ab0f74ced1362f66f552f7b
 - name: github.com/spf13/pflag
-  version: 5c2d607c75df0540c877524f9e82d3edb7748668
+  version: 97afa5e7ca8a08a383cb259e06636b5e2cc7897f
 - name: github.com/spf13/viper
   version: 25b30aa063fc18e48662b86996252eabdcf2f0c7
 - name: github.com/streadway/amqp
-  version: afe8eee29a74d213b1f3fb2586058157c397da60
+  version: ff791c2d22d3f1588b4e2cc71a9fba5e1da90654
 - name: github.com/stretchr/testify
   version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:
@@ -96,13 +95,13 @@ imports:
 - name: github.com/valyala/fasttemplate
   version: dcecefd839c4193db0d35b88ec65b4c12d360ab0
 - name: golang.org/x/crypto
-  version: 9419663f5a44be8b34ca85f08abc5fe1be11f8a3
+  version: bd6f299fb381e4c3393d1c4b1f0b94f5e77650c8
   subpackages:
   - acme
   - acme/autocert
   - ssh/terminal
 - name: golang.org/x/net
-  version: 0a9397675ba34b2845f758fe3cd68828369c6517
+  version: ea0da6f35caf3ff91581c800469e22eef75076f4
   subpackages:
   - context
   - context/ctxhttp
@@ -120,24 +119,24 @@ imports:
   - jws
   - jwt
 - name: golang.org/x/sync
-  version: 8e0aa688b654ef28caa72506fa5ec8dba9fc7690
+  version: fd80eb99c8f653c847d294a001bdf2a3a6f768f5
   subpackages:
   - errgroup
   - semaphore
 - name: golang.org/x/sys
-  version: 314a259e304ff91bd6985da2a7149bbf91237993
+  version: 95c6576299259db960f6c5b9b69ea52422860fce
   subpackages:
   - unix
   - windows
 - name: golang.org/x/text
-  version: 1cbadb444a806fd9430d14ad08967ed91da4fa0a
+  version: 3ba1a4dc141f5236b19ccbf2f67cb63d1a688d46
   subpackages:
   - secure/bidirule
   - transform
   - unicode/bidi
   - unicode/norm
 - name: google.golang.org/api
-  version: 906273f42cdebd65de3a53f30dd9e23de1b55ba9
+  version: 8c7cbce8616dff98a4442737eaa00096f04d7905
   subpackages:
   - googleapi/transport
   - internal
@@ -148,7 +147,7 @@ imports:
   - transport/grpc
   - transport/http
 - name: google.golang.org/appengine
-  version: 150dc57a1b433e64154302bdc40b6bb8aefa313a
+  version: 9d8544a6b2c7df9cff240fcf92d7b2f59bc13416
   subpackages:
   - internal
   - internal/app_identity
@@ -162,14 +161,9 @@ imports:
   - socket
   - urlfetch
 - name: google.golang.org/genproto
-  version: 1e559d0a00eef8a9a43151db4665280bd8dd5886
+  version: 03951f3b52582ecab79e5a37a86b5a20c5f64df7
   subpackages:
-  - googleapis/api
   - googleapis/api/annotations
-  - googleapis/api/label
-  - googleapis/api/metric
-  - googleapis/api/monitoredres
-  - googleapis/api/serviceconfig
   - googleapis/iam/v1
   - googleapis/longrunning
   - googleapis/pubsub/v1
@@ -177,23 +171,27 @@ imports:
   - googleapis/rpc/status
   - googleapis/spanner/admin/database/v1
   - googleapis/spanner/v1
-  - protobuf/api
   - protobuf/field_mask
-  - protobuf/ptype
-  - protobuf/source_context
 - name: google.golang.org/grpc
-  version: 42c095b6c9bdd80d4435b064508c398afdb0ec99
+  version: 08a45354194cd00490a5d926825670fb928b5f76
   subpackages:
+  - balancer
+  - balancer/roundrobin
   - codes
+  - connectivity
   - credentials
   - credentials/oauth
-  - grpclb/grpc_lb_v1
+  - encoding
+  - grpclb/grpc_lb_v1/messages
   - grpclog
   - internal
   - keepalive
   - metadata
   - naming
   - peer
+  - resolver
+  - resolver/dns
+  - resolver/passthrough
   - stats
   - status
   - tap
