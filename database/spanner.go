@@ -101,6 +101,7 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 		move = msg.Value
 	default:
 		return &spanner.Error{
+			Code: codes.InvalidArgument,
 			Desc: "Invalid operation sent from message, aborting transaction!",
 		}
 	}
