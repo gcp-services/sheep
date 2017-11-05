@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/gob"
+	"fmt"
 
 	"cloud.google.com/go/pubsub"
 )
@@ -36,13 +37,12 @@ func NewPubsub(project, topic, subscription string) (*Pubsub, error) {
 			return nil, err
 		}
 	}
-
 	// Create our subscription
 	s := client.Subscription(subscription)
 	exists, err = s.Exists(context.Background())
 
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	if !exists {
@@ -50,6 +50,7 @@ func NewPubsub(project, topic, subscription string) (*Pubsub, error) {
 			Topic: t,
 		})
 		if err != nil {
+			fmt.Printf("%s", err.Error())
 			return nil, err
 		}
 	}
@@ -89,7 +90,8 @@ func (p *Pubsub) Read() (chan *Message, error) {
 			}
 		})
 	}(c)
-	return nil, nil
+
+	return c, nil
 }
 
 func (p *Pubsub) Save(message *Message) error {
@@ -105,6 +107,9 @@ func (p *Pubsub) Save(message *Message) error {
 		Data: b.Bytes(),
 	})
 
-	<-res.Ready()
+	_, err = res.Get(context.Background())
+	if err != nil {
+		return err
+	}
 	return nil
 }

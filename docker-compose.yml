@@ -3,8 +3,8 @@ services:
   pubsub:
     ports:
       - "8085:8085"
-    image: google/cloud-sdk:171.0.0
-    command: "gcloud beta emulators pubsub start"
+    image: google/cloud-sdk:178.0.0
+    command: "gcloud beta emulators pubsub start --verbosity=debug"
   cdb:
     ports:
       - "26257:26257"

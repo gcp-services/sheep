@@ -6,7 +6,7 @@ type Stream interface {
 }
 
 type Database interface {
-	Save()
+	Save(*Message) error
 	Read()
 }
 
@@ -19,3 +19,5 @@ type Message struct {
 	Operation string
 	Ack       chan bool
 }
+
+type contextKey string
