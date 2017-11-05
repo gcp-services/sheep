@@ -48,6 +48,7 @@ func setupDatabase() (database.Database, error) {
 	}
 
 	if viper.GetBool("spanner.enabled") {
+		log.Info().Msg("Setting up Spanner connection and schema")
 		return database.NewSpanner(
 			viper.GetString("spanner.project"),
 			viper.GetString("spanner.instance"),
@@ -69,9 +70,11 @@ func setupQueue() (database.Stream, error) {
 	}
 
 	if viper.GetBool("pubsub.enabled") {
+		log.Info().Msg("Setting up Pub/Sub connection, topic, and subscription")
 		return database.NewPubsub(
 			viper.GetString("pubsub.project"),
 			viper.GetString("pubsub.topic"),
+			viper.GetString("pubsub.subscription"),
 		)
 	}
 
@@ -93,7 +96,7 @@ func setupWebserver(stream database.Stream, database database.Database) {
 	v1.Register(e)
 	log.Info().
 		Int("port", 5309).
-		Msg("Starting webserver")
+		Msg("Started webserver, you're good to go!")
 	err := e.Start(":5309")
 	if strings.Contains(err.Error(), "Server closed") {
 		log.Info().

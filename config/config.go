@@ -11,6 +11,7 @@ func setDefaults() {
 	viper.SetDefault("rabbitmq.enabled", false)
 	viper.SetDefault("cockroachdb.enabled", false)
 	viper.SetDefault("pubsub.topic", "sheep")
+	viper.SetDefault("pubsub.subscription", "sheep")
 }
 
 func Setup(path string) {

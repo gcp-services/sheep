@@ -16,11 +16,11 @@ cockroachdb:
 
 pubsub:
   enabled: true
-  project: lobato-dude
+  project: jinked-home
   topic: sheep
 
 spanner:
   enabled: true
-  project: lobato-dude
+  project: jinked-home
   instance: sheep-test
   database: test
