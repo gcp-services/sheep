@@ -2,7 +2,7 @@ package database
 
 type Stream interface {
 	Save(*Message) error
-	Read() (chan *Message, error)
+	Read(MessageFn) error
 }
 
 type Database interface {
@@ -20,5 +20,7 @@ type Message struct {
 	Value     int64
 	Ack       chan bool
 }
+
+type MessageFn func(*Message) bool
 
 type contextKey string

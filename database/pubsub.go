@@ -62,36 +62,25 @@ func NewPubsub(project, topic, subscription string) (*Pubsub, error) {
 	}, nil
 }
 
-func (p *Pubsub) Read() (chan *Message, error) {
-	c := make(chan *Message)
+func (p *Pubsub) Read(cb MessageFn) error {
 
-	// We need to wrap this so we don't lose context here.
-	func(ic chan *Message) {
-		p.subscription.Receive(context.Background(), func(ctx context.Context, msg *pubsub.Message) {
-			// Decode our message
-			var message *Message
-			b := bytes.Buffer{}
-			b.Write(msg.Data)
-			d := gob.NewDecoder(&b)
-			d.Decode(&message)
+	// Use a callback to fire a message up the ladder to the caller
+	// and the caller returns an ack/nack response.
+	return p.subscription.Receive(context.Background(), func(ctx context.Context, msg *pubsub.Message) {
+		// Decode our message
+		var message *Message
+		b := bytes.Buffer{}
+		b.Write(msg.Data)
+		d := gob.NewDecoder(&b)
+		d.Decode(&message)
 
-			// Create our response channel
-			message.Ack = make(chan bool)
+		if cb(message) {
+			msg.Ack()
+		} else {
+			msg.Nack()
+		}
 
-			// Send our decoded message + response channel
-			ic <- message
-
-			// Wait for a response and handle it.
-			ack := <-message.Ack
-			if ack {
-				msg.Ack()
-			} else {
-				msg.Nack()
-			}
-		})
-	}(c)
-
-	return c, nil
+	})
 }
 
 func (p *Pubsub) Save(message *Message) error {
