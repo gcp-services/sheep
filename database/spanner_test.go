@@ -19,7 +19,7 @@ func TestSpannerSave(t *testing.T) {
 	sp, err := NewSpanner("jinked-home", "sheep-test", "sheep")
 	assert.Nil(t, err)
 	err = sp.Save(&Message{
-		UUID:      "1234",
+		UUID:      "123456",
 		Keyspace:  "test",
 		Key:       "test",
 		Name:      "some counter",

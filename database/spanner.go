@@ -64,14 +64,14 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 	msg := ctx.Value(contextKey("message")).(*Message)
 
 	// First, let's check and see if our message has been written.
-	applied, err := rw.ReadRow(context.Background(), "sheep_transaction", spanner.Key{msg.UUID}, []string{"applied"})
+	row, err := rw.ReadRow(context.Background(), "sheep_transaction", spanner.Key{msg.UUID}, []string{"applied"})
 	if err != nil {
 		if spanner.ErrCode(err) != codes.NotFound {
 			return err
 		}
 	} else {
 		var ap bool
-		err = applied.ColumnByName("Applied", &ap)
+		err = row.ColumnByName("Applied", &ap)
 		if err != nil {
 			return err
 		}
@@ -80,20 +80,29 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 		}
 	}
 
-	// This message hasn't been written, let's write it!
-
-	// First, let's figure out what we're doing with the message.
+	// Let's get our current count
+	row, err = rw.ReadRow(context.Background(), "sheep", spanner.Key{msg.Keyspace, msg.Key, msg.Name}, []string{"Count"})
+	if err != nil {
+		return err
+	}
 	var move int64
+	row.ColumnByName("Count", &move)
+
+	// Now we'll do our operation.
 	switch msg.Operation {
 	case "incr":
-		move = 1
+		move++
 	case "decr":
-		move = -1
+		move--
+	case "set":
+		move = msg.Value
 	default:
 		return &spanner.Error{
 			Desc: "Invalid operation sent from message, aborting transaction!",
 		}
 	}
+
+	// Build our mutation...
 	m := []*spanner.Mutation{
 		spanner.InsertOrUpdate(
 			"sheep_transaction",
@@ -105,6 +114,8 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 			[]interface{}{msg.Keyspace, msg.Key, msg.Name, move},
 		),
 	}
+
+	// ...and write!
 	return rw.BufferWrite(m)
 
 }

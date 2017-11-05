@@ -17,6 +17,7 @@ type Message struct {
 	Key       string
 	Name      string
 	Operation string
+	Value     int64
 	Ack       chan bool
 }
 
