@@ -64,7 +64,7 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 	msg := ctx.Value(contextKey("message")).(*Message)
 
 	// First, let's check and see if our message has been written.
-	row, err := rw.ReadRow(context.Background(), "sheep_transaction", spanner.Key{msg.UUID}, []string{"applied"})
+	row, err := rw.ReadRow(context.Background(), "sheep_transaction", spanner.Key{msg.Keyspace, msg.Key, msg.Name, msg.UUID}, []string{"Applied"})
 	if err != nil {
 		if spanner.ErrCode(err) != codes.NotFound {
 			return err
@@ -81,12 +81,15 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 	}
 
 	// Let's get our current count
+	var move int64
 	row, err = rw.ReadRow(context.Background(), "sheep", spanner.Key{msg.Keyspace, msg.Key, msg.Name}, []string{"Count"})
 	if err != nil {
-		return err
+		if spanner.ErrCode(err) != codes.NotFound {
+			return err
+		}
+	} else {
+		row.ColumnByName("Count", &move)
 	}
-	var move int64
-	row.ColumnByName("Count", &move)
 
 	// Now we'll do our operation.
 	switch msg.Operation {
@@ -105,14 +108,14 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 	// Build our mutation...
 	m := []*spanner.Mutation{
 		spanner.InsertOrUpdate(
-			"sheep_transaction",
-			[]string{"UUID", "Applied"},
-			[]interface{}{msg.UUID, true}),
-		spanner.InsertOrUpdate(
 			"sheep",
 			[]string{"Keyspace", "Key", "Name", "Count"},
 			[]interface{}{msg.Keyspace, msg.Key, msg.Name, move},
 		),
+		spanner.InsertOrUpdate(
+			"sheep_transaction",
+			[]string{"Keyspace", "Key", "Name", "UUID", "Applied"},
+			[]interface{}{msg.Keyspace, msg.Key, msg.Name, msg.UUID, true}),
 	}
 
 	// ...and write!
@@ -137,9 +140,13 @@ func (s *Spanner) createSpannerDatabase(ctx context.Context, project, instance, 
 							Count 		INT64
 					) PRIMARY KEY (Keyspace, Key, Name)`,
 				`CREATE TABLE sheep_transaction (
+							Keyspace 	STRING(MAX) NOT NULL,
+							Key 			STRING(MAX) NOT NULL,
+							Name			STRING(MAX) NOT NULL,
 							UUID 			STRING(128) NOT NULL,
 							Applied 	BOOL
-					) PRIMARY KEY (UUID)`,
+					) PRIMARY KEY (Keyspace, Key, Name, UUID),
+						INTERLEAVE IN PARENT sheep ON DELETE CASCADE`,
 			},
 		})
 
