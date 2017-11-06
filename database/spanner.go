@@ -50,7 +50,19 @@ func NewSpanner(project, instance, db string) (*Spanner, error) {
 	return sp, err
 }
 
-func (s *Spanner) Read() {
+func (s *Spanner) Read(msg *Message) error {
+	row, err := s.client.Single().ReadRow(
+		context.Background(),
+		"sheep",
+		spanner.Key{msg.Keyspace, msg.Key, msg.Name},
+		[]string{"Count"},
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return row.ColumnByName("Count", &msg.Value)
 }
 
 func (s *Spanner) Save(message *Message) error {

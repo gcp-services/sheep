@@ -24,23 +24,30 @@ func TestSpannerSave(t *testing.T) {
 		Value:     0,
 	}
 
-	// Set our counter to 0
+	// Set our counter to 0 and read it back
 	err = sp.Save(msg)
 	assert.Nil(t, err)
+	err = sp.Read(msg)
+	assert.Nil(t, err)
+	assert.EqualValues(t, 0, msg.Value)
 
-	// TODO: READ
-
-	// Increment by 1
+	// Increment by 1 and read it back
 	msg.Operation = "incr"
 	msg.UUID = uuid.NewV4().String()
 	err = sp.Save(msg)
 	assert.Nil(t, err)
+	err = sp.Read(msg)
+	assert.Nil(t, err)
+	assert.EqualValues(t, 1, msg.Value)
 
 	// Decrement by 1
 	msg.Operation = "decr"
 	msg.UUID = uuid.NewV4().String()
 	err = sp.Save(msg)
 	assert.Nil(t, err)
+	err = sp.Read(msg)
+	assert.Nil(t, err)
+	assert.EqualValues(t, 0, msg.Value)
 
 	// Invalid operation should error
 	msg.Operation = "nope"

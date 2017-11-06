@@ -7,7 +7,7 @@ type Stream interface {
 
 type Database interface {
 	Save(*Message) error
-	Read()
+	Read(*Message) error
 }
 
 // Message struct for doing an operation.
