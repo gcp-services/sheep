@@ -13,7 +13,7 @@ func TestNewPubsub(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestPubsubSave(t *testing.T) {
+func TestPubsubSaveAndRead(t *testing.T) {
 	p, err := NewPubsub("jinked-home", "tests", "tests")
 	assert.Nil(t, err)
 
@@ -21,8 +21,8 @@ func TestPubsubSave(t *testing.T) {
 		UUID: "1234",
 	})
 	assert.Nil(t, err)
-}
 
-func TestPubsubRead(t *testing.T) {
-
+	p.Read(func(msg *Message) bool {
+		return true
+	})
 }
