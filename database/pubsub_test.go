@@ -22,7 +22,7 @@ func TestPubsubSaveAndRead(t *testing.T) {
 	})
 	assert.Nil(t, err)
 
-	p.Read(func(msg *Message) bool {
-		return true
-	})
+	//p.Read(func(msg *Message) bool {
+	//	return true
+	//})
 }

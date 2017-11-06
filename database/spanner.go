@@ -63,6 +63,9 @@ func (s *Spanner) Save(message *Message) error {
 func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) error {
 	msg := ctx.Value(contextKey("message")).(*Message)
 
+	// TODO: Since these tables are interleaved, a statement + join
+	// will work better here.
+
 	// First, let's check and see if our message has been written.
 	row, err := rw.ReadRow(context.Background(), "sheep_transaction", spanner.Key{msg.Keyspace, msg.Key, msg.Name, msg.UUID}, []string{"Applied"})
 	if err != nil {

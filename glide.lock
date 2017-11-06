@@ -1,8 +1,8 @@
-hash: 00fe4633928aba918b9324709b709f6c9c75f782b17b3ae5c5c4d6defedd5dc8
-updated: 2017-11-02T08:46:51.534130453-07:00
+hash: cc21f4b7112a5e15306f14604e563a34a922e41e00e9554b062b1f95003b4d35
+updated: 2017-11-06T10:20:58.587950783-08:00
 imports:
 - name: cloud.google.com/go
-  version: f6de2c509ed9d2af648c3c147207eaaf97149aed
+  version: 2d3a6656c17a60b0815b7e06ab0be04eacb6e613
   subpackages:
   - civil
   - compute/metadata
@@ -81,7 +81,7 @@ imports:
 - name: github.com/spf13/jwalterweatherman
   version: 12bd96e66386c1960ab0f74ced1362f66f552f7b
 - name: github.com/spf13/pflag
-  version: 97afa5e7ca8a08a383cb259e06636b5e2cc7897f
+  version: 4c012f6dcd9546820e378d0bdda4d8fc772cdfea
 - name: github.com/spf13/viper
   version: 25b30aa063fc18e48662b86996252eabdcf2f0c7
 - name: github.com/streadway/amqp
@@ -95,13 +95,13 @@ imports:
 - name: github.com/valyala/fasttemplate
   version: dcecefd839c4193db0d35b88ec65b4c12d360ab0
 - name: golang.org/x/crypto
-  version: bd6f299fb381e4c3393d1c4b1f0b94f5e77650c8
+  version: 687d4b818545e443c8ba223cbef20b1721afd4db
   subpackages:
   - acme
   - acme/autocert
   - ssh/terminal
 - name: golang.org/x/net
-  version: ea0da6f35caf3ff91581c800469e22eef75076f4
+  version: 01c190206fbdffa42f334f4b2bf2220f50e64920
   subpackages:
   - context
   - context/ctxhttp
@@ -112,7 +112,7 @@ imports:
   - lex/httplex
   - trace
 - name: golang.org/x/oauth2
-  version: bb50c06baba3d0c76f9d125c0719093e315b5b44
+  version: 9ff8ebcc8e241d46f52ecc5bff0e5a2f2dbef402
   subpackages:
   - google
   - internal
@@ -124,19 +124,19 @@ imports:
   - errgroup
   - semaphore
 - name: golang.org/x/sys
-  version: 95c6576299259db960f6c5b9b69ea52422860fce
+  version: d4266bc12aae0b4128952c889b769442fce5d2f1
   subpackages:
   - unix
   - windows
 - name: golang.org/x/text
-  version: 3ba1a4dc141f5236b19ccbf2f67cb63d1a688d46
+  version: 88f656faf3f37f690df1a32515b479415e1a6769
   subpackages:
   - secure/bidirule
   - transform
   - unicode/bidi
   - unicode/norm
 - name: google.golang.org/api
-  version: 8c7cbce8616dff98a4442737eaa00096f04d7905
+  version: 9fdb53e0c633e09f7df19c7745ee0e39ce3f5e6a
   subpackages:
   - googleapi/transport
   - internal
@@ -161,7 +161,7 @@ imports:
   - socket
   - urlfetch
 - name: google.golang.org/genproto
-  version: 03951f3b52582ecab79e5a37a86b5a20c5f64df7
+  version: 11c7f9e547da6db876260ce49ea7536985904c9b
   subpackages:
   - googleapis/api/annotations
   - googleapis/iam/v1
@@ -173,7 +173,7 @@ imports:
   - googleapis/spanner/v1
   - protobuf/field_mask
 - name: google.golang.org/grpc
-  version: 08a45354194cd00490a5d926825670fb928b5f76
+  version: 4318e6475c4b2660f7b8ddb77a4504da77311504
   subpackages:
   - balancer
   - balancer/roundrobin
