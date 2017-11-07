@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -24,7 +25,7 @@ func TestPubsubSaveAndRead(t *testing.T) {
 	assert.Nil(t, err)
 
 	c := make(chan bool)
-	go p.Read(func(msg *Message) bool {
+	go p.Read(context.Background(), func(msg *Message) bool {
 		if msg.UUID == "1234" && msg.Value == 1337 {
 			c <- true
 			return true

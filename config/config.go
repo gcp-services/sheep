@@ -12,6 +12,8 @@ func setDefaults() {
 	viper.SetDefault("cockroachdb.enabled", false)
 	viper.SetDefault("pubsub.topic", "sheep")
 	viper.SetDefault("pubsub.subscription", "sheep")
+	viper.SetDefault("master", true)
+	viper.SetDefault("worker", true)
 }
 
 func Setup(path string) {

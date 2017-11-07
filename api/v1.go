@@ -1,8 +1,10 @@
 package api
 
 import (
+	"cloud.google.com/go/spanner"
 	"github.com/Cidan/sheep/database"
 	"github.com/labstack/echo"
+	"google.golang.org/grpc/codes"
 )
 
 type Handler struct {
@@ -47,6 +49,9 @@ func (h *Handler) Get(c echo.Context) error {
 	}
 	err := h.Database.Read(msg)
 	if err != nil {
+		if spanner.ErrCode(err) == codes.NotFound {
+			return c.JSON(404, echo.ErrNotFound)
+		}
 		return err
 	}
 	return c.JSON(200, msg)
@@ -54,7 +59,30 @@ func (h *Handler) Get(c echo.Context) error {
 
 func (h *Handler) Submit(c echo.Context, op string) error {
 	msg := &database.Message{}
-	c.Bind(msg)
+	if err := c.Bind(msg); err != nil {
+		return err
+	}
+
+	if err := validateMessage(msg); err != nil {
+		return c.JSON(400, err)
+	}
+
 	msg.Operation = op
 	return h.Stream.Save(msg)
+}
+
+func validateMessage(msg *database.Message) error {
+	if msg.Key == "" {
+		return echo.NewHTTPError(400, "invalid payload, missing key field")
+	}
+	if msg.Keyspace == "" {
+		return echo.NewHTTPError(400, "invalid payload, missing keyspace field")
+	}
+	if msg.Name == "" {
+		return echo.NewHTTPError(400, "invalid payload, missing name field")
+	}
+	if msg.UUID == "" {
+		return echo.NewHTTPError(400, "invalid payload, missing uuid field")
+	}
+	return nil
 }

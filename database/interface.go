@@ -1,8 +1,10 @@
 package database
 
+import "context"
+
 type Stream interface {
 	Save(*Message) error
-	Read(MessageFn) error
+	Read(context.Context, MessageFn) error
 }
 
 type Database interface {

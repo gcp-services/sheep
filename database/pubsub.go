@@ -62,19 +62,18 @@ func NewPubsub(project, topic, subscription string) (*Pubsub, error) {
 	}, nil
 }
 
-func (p *Pubsub) Read(cb MessageFn) error {
+func (p *Pubsub) Read(rctx context.Context, cb MessageFn) error {
 
 	// Use a callback to fire a message up the ladder to the caller
 	// and the caller returns an ack/nack response.
-	return p.subscription.Receive(context.Background(), func(ctx context.Context, msg *pubsub.Message) {
+	return p.subscription.Receive(rctx, func(ctx context.Context, msg *pubsub.Message) {
 		// Decode our message
-		var message *Message
-		b := bytes.Buffer{}
+		var message Message
+		var b bytes.Buffer
 		b.Write(msg.Data)
 		d := gob.NewDecoder(&b)
 		d.Decode(&message)
-
-		if cb(message) {
+		if cb(&message) {
 			msg.Ack()
 		} else {
 			msg.Nack()
@@ -84,7 +83,7 @@ func (p *Pubsub) Read(cb MessageFn) error {
 }
 
 func (p *Pubsub) Save(message *Message) error {
-	b := bytes.Buffer{}
+	var b bytes.Buffer
 	e := gob.NewEncoder(&b)
 	err := e.Encode(message)
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -9,6 +10,7 @@ import (
 	"github.com/Cidan/sheep/api"
 	"github.com/Cidan/sheep/config"
 	"github.com/Cidan/sheep/database"
+	"github.com/Cidan/sheep/util"
 	"github.com/labstack/echo"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -29,7 +31,38 @@ func main() {
 	if err != nil {
 		log.Panic().Err(err).Msg("Could not setup database")
 	}
-	setupWebserver(stream, database)
+
+	if viper.GetBool("worker") {
+		go setupWorker(stream, database)
+		// Do something
+	}
+
+	if viper.GetBool("master") {
+		go setupWebserver(stream, database)
+	}
+	util.WaitForSigInt()
+
+	log.Info().Msg("Shutting down...")
+}
+
+//
+func setupWorker(stream database.Stream, db database.Database) {
+	// TODO: Add context
+	// TODO: This can drop into an infinite loop if an error is permanently fatal
+	// but max retry breaks our promise of 100% correct -- message must be validated
+	// on PUT into queue before HTTP return.
+	// TODO: Check stream.Read return error
+	// For loop here is a guard in case read fails, read blocks/loops.
+	for {
+		stream.Read(context.Background(), func(msg *database.Message) bool {
+			err := db.Save(msg)
+			if err != nil {
+				log.Error().Err(err).Msg("Unable to save stream message")
+				return false
+			}
+			return true
+		})
+	}
 }
 
 func setupDatabase() (database.Database, error) {

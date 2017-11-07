@@ -3,6 +3,9 @@ package util
 import (
 	"fmt"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 )
 
@@ -14,6 +17,12 @@ func IsPortOpen(host string, port int) bool {
 	}
 	defer conn.Close()
 	return true
+}
+
+func WaitForSigInt() {
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	<-sigs
 }
 
 func WaitForPort(host string, port int, to int) bool {
