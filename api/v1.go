@@ -4,6 +4,7 @@ import (
 	"cloud.google.com/go/spanner"
 	"github.com/Cidan/sheep/database"
 	"github.com/labstack/echo"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 )
 
@@ -64,6 +65,7 @@ func (h *Handler) Submit(c echo.Context, op string) error {
 	}
 
 	if err := validateMessage(msg); err != nil {
+		log.Error().Err(err).Msg("unable to put message")
 		return c.JSON(400, err)
 	}
 
