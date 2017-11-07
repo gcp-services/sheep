@@ -18,7 +18,6 @@ type Message struct {
 	Name      string
 	Operation string
 	Value     int64
-	Ack       chan bool
 }
 
 type MessageFn func(*Message) bool

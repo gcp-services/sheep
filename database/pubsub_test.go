@@ -24,7 +24,6 @@ func TestPubsubSaveAndRead(t *testing.T) {
 	assert.Nil(t, err)
 
 	c := make(chan bool)
-
 	go p.Read(func(msg *Message) bool {
 		if msg.UUID == "1234" && msg.Value == 1337 {
 			c <- true

@@ -23,4 +23,4 @@ spanner:
   enabled: true
   project: jinked-home
   instance: sheep-test
-  database: test
+  database: sheep

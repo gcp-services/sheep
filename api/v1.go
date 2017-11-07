@@ -25,17 +25,31 @@ func (h *Handler) path(path string) string {
 
 func (h *Handler) Register(e *echo.Echo) error {
 	e.GET(h.path("/get"), h.Get)
+
+	// Operations
 	e.PUT(h.path("/incr"), func(c echo.Context) error {
 		return h.Submit(c, "incr")
 	})
 	e.PUT(h.path("/decr"), func(c echo.Context) error {
 		return h.Submit(c, "decr")
 	})
+	e.PUT(h.path("/set"), func(c echo.Context) error {
+		return h.Submit(c, "set")
+	})
 	return nil
 }
 
 func (h *Handler) Get(c echo.Context) error {
-	return nil
+	msg := &database.Message{
+		Keyspace: c.QueryParam("keyspace"),
+		Key:      c.QueryParam("key"),
+		Name:     c.QueryParam("name"),
+	}
+	err := h.Database.Read(msg)
+	if err != nil {
+		return err
+	}
+	return c.JSON(200, msg)
 }
 
 func (h *Handler) Submit(c echo.Context, op string) error {
