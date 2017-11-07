@@ -1,4 +1,7 @@
 # Example and test config.
+master: true
+worker: true
+
 rabbitmq:
   enabled: false
   hosts:
