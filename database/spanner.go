@@ -56,12 +56,12 @@ func NewSpanner(project, instance, db string) (*Spanner, error) {
 func (s *Spanner) Read(msg *Message) error {
 
 	stmt := spanner.NewStatement(`
-		SELECT SUM(a.Count) as Count
-		FROM sheep as a
-		WHERE a.Keyspace=@Keyspace
-		AND a.Key=@Key
-		AND a.Name=@Name	
-	`)
+			SELECT SUM(a.Count) as Count
+			FROM sheep as a
+			WHERE a.Keyspace=@Keyspace
+			AND a.Key=@Key
+			AND a.Name=@Name
+		`)
 	stmt.Params["Keyspace"] = msg.Keyspace
 	stmt.Params["Key"] = msg.Key
 	stmt.Params["Name"] = msg.Name
