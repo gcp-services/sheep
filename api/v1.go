@@ -5,6 +5,7 @@ import (
 	"github.com/Cidan/sheep/database"
 	"github.com/labstack/echo"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/viper"
 	"google.golang.org/grpc/codes"
 )
 
@@ -70,7 +71,11 @@ func (h *Handler) Submit(c echo.Context, op string) error {
 	}
 
 	msg.Operation = op
-	return h.Stream.Save(msg)
+	if viper.GetBool("direct") {
+		return h.Database.Save(msg)
+	} else {
+		return h.Stream.Save(msg)
+	}
 }
 
 func validateMessage(msg *database.Message) error {

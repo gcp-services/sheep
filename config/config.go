@@ -14,6 +14,7 @@ func setDefaults() {
 	viper.SetDefault("pubsub.subscription", "sheep")
 	viper.SetDefault("master", true)
 	viper.SetDefault("worker", true)
+	viper.SetDefault("direct", false)
 }
 
 func Setup(path string) {

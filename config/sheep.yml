@@ -1,6 +1,7 @@
 # Example and test config.
 master: true
 worker: true
+direct: false
 
 rabbitmq:
   enabled: false
