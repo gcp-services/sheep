@@ -7,7 +7,7 @@
 
 ## Sheep?
 
-Sheep is a distributed, idempotent, and eventually consistent counter service backed by different backends. When properly configured, sheep will **guarantee** accurate counts.
+Sheep is a distributed, idempotent, and eventually consistent counter service backed by different backends. When properly configured, sheep will **guarantee** accurate counts, so long as the underlying databases, i.e. Pub/Sub, Spanner, are durable.
 
 Sheep is built to scale. By leveraging scalable systems and designs, Sheep allows you to keep fully idempotent and accurate counts at a rate of hudreds of thousands of requests a second.
 
@@ -21,6 +21,7 @@ When in master mode, Sheep accepts a very simple REST API in order to submit tra
 
 When in worker mode, Sheep pulls transactions off of the configured stream and applies the changes to permanent storage. Only once a transaction has been committed to disk will the service acknowledge the transaction from the stream. Retries are okay -- the storage system will keep a transaction log and ensure that any transaction only happens once.
 
+Data
 ## Docs
 
 Sheep reads in a configuration YAML called `sheep.yml` from one of the following locations:
