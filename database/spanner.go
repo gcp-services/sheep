@@ -67,9 +67,10 @@ func (s *Spanner) Read(msg *Message) error {
 	stmt.Params["Name"] = msg.Name
 
 	// TODO: Expose this stale time.
+	// TODO: Stale time breaks tests.
 	iter := s.client.
 		Single().
-		WithTimestampBound(spanner.MaxStaleness(5*time.Second)).
+		//WithTimestampBound(spanner.MaxStaleness(5*time.Second)).
 		Query(context.Background(), stmt)
 	defer iter.Stop()
 

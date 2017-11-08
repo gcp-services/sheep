@@ -5,9 +5,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-func setDefaults() {
+func SetDefaults() {
 	viper.SetDefault("spanner.enabled", false)
-	viper.SetDefault("spanner.shards", 1)
+	viper.SetDefault("spanner.shards", 10)
 	viper.SetDefault("pubsub.enabled", false)
 	viper.SetDefault("rabbitmq.enabled", false)
 	viper.SetDefault("cockroachdb.enabled", false)
@@ -29,7 +29,7 @@ func Setup(path string) {
 	if path != "" {
 		viper.AddConfigPath(path)
 	}
-	setDefaults()
+	SetDefaults()
 
 	err := viper.ReadInConfig()
 	if err != nil {

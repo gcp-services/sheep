@@ -3,6 +3,7 @@ package database
 import (
 	"testing"
 
+	"github.com/Cidan/sheep/config"
 	"github.com/satori/go.uuid"
 	"github.com/stretchr/testify/assert"
 )
@@ -11,6 +12,7 @@ func TestSetupSpanner(t *testing.T) {
 }
 
 func TestSpannerSave(t *testing.T) {
+	config.SetDefaults()
 	sp, err := NewSpanner("jinked-home", "sheep-test", "sheep")
 	assert.Nil(t, err)
 
