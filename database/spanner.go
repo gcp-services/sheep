@@ -75,9 +75,6 @@ func (s *Spanner) Save(message *Message) error {
 func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) error {
 	msg := ctx.Value(contextKey("message")).(*Message)
 
-	// TODO: Since these tables are interleaved, a statement + join
-	// will work better here.
-
 	stmt := spanner.NewStatement(`
   SELECT a.Count,
 		(SELECT b.UUID
