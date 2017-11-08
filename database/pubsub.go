@@ -57,7 +57,7 @@ func NewPubsub(project, topic, subscription string) (*Pubsub, error) {
 
 	// TODO: configure this
 	s.ReceiveSettings.NumGoroutines = 1
-	s.ReceiveSettings.MaxOutstandingMessages = 10
+	s.ReceiveSettings.MaxOutstandingMessages = 100
 
 	return &Pubsub{
 		client:       client,
