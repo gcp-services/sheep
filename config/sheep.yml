@@ -1,6 +1,8 @@
 # Example and test config.
 master: true
 worker: true
+# When in direct mode, the master will write
+# directly to the database.
 direct: false
 
 rabbitmq:
@@ -25,7 +27,8 @@ pubsub:
 
 spanner:
   enabled: true
-  shards: 10
+  shards: 10 # Shard writes on a per-counter basis out to this many buckets.
+             # This helps with hot writes (but not reads, use a cache).
   project: jinked-home
   instance: sheep-test
   database: sheep
