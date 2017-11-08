@@ -3,6 +3,7 @@ build:
 	go install
 
 test:
+	go vet ./...
 	go test -covermode=atomic ./...
 
 run:

@@ -40,5 +40,4 @@ func WaitForPort(host string, port int, to int) bool {
 			}
 		}
 	}
-	return false
 }

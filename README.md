@@ -40,10 +40,10 @@ The API looks like this:
 curl "localhost:5309/v1/get?keyspace=test&key=test&name=some%20counter"
 
 # Increment a counter
-curl -H "Content-Type: application/json" "localhost:5309/v1/incr" -d \ 
+curl -X PUT -H "Content-Type: application/json" "localhost:5309/v1/incr" -d \ 
   '{"UUID": "aabbcc", "Keyspace": "users", "Key": "some-user-id", "Name": "counter-name"}'
 
 # Decrement a counter
-curl -H "Content-Type: application/json" "localhost:5309/v1/decr" -d \ 
+curl -X PUT -H "Content-Type: application/json" "localhost:5309/v1/decr" -d \ 
   '{"UUID": "aabbcc", "Keyspace": "users", "Key": "some-user-id", "Name": "counter-name"}'
 ```
