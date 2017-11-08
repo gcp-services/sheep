@@ -7,7 +7,7 @@
 
 ## Sheep?
 
-Sheep is a distributed, idempotent, and eventually consistent counter service backed by different backends. When properly configured, sheep will **guarantee** accurate counts, so long as the underlying databases, i.e. Pub/Sub, Spanner, are durable.
+Sheep is a distributed, idempotent, and eventually consistent counter service backed by different backends. When properly configured, Sheep will guarantee accurate counts, so long as the underlying databases, i.e. Pub/Sub, Spanner, are durable.
 
 Sheep is built to scale. By leveraging scalable systems and designs, Sheep allows you to keep fully idempotent and accurate counts at a rate of hudreds of thousands of requests a second.
 
