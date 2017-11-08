@@ -71,11 +71,10 @@ func (h *Handler) Submit(c echo.Context, op string) error {
 	}
 
 	msg.Operation = op
-	if viper.GetBool("direct") {
+	if viper.GetBool("direct") || c.QueryParam("direct") == "true" {
 		return h.Database.Save(msg)
-	} else {
-		return h.Stream.Save(msg)
 	}
+	return h.Stream.Save(msg)
 }
 
 func validateMessage(msg *database.Message) error {

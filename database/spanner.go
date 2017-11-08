@@ -78,32 +78,58 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 	// TODO: Since these tables are interleaved, a statement + join
 	// will work better here.
 
-	// First, let's check and see if our message has been written.
-	row, err := rw.ReadRow(context.Background(), "sheep_transaction", spanner.Key{msg.Keyspace, msg.Key, msg.Name, msg.UUID}, []string{"Applied"})
+	stmt := spanner.NewStatement(`
+  SELECT a.Count,
+		(SELECT b.UUID
+     FROM sheep_transaction AS b
+     WHERE b.Keyspace=@Keyspace
+     AND b.Key = @Key
+     AND b.Name = @Name
+     AND b.UUID = @UUID
+     ) as UUID
+  FROM sheep as a
+  WHERE a.Keyspace=@Keyspace
+  AND a.Key=@Key
+  AND a.Name=@Name
+	`)
+
+	stmt.Params["Keyspace"] = msg.Keyspace
+	stmt.Params["Key"] = msg.Key
+	stmt.Params["Name"] = msg.Name
+	stmt.Params["UUID"] = msg.UUID
+
+	iter := rw.Query(ctx, stmt)
+	row, err := iter.Next()
+	iter.Stop()
+
+	// Let's check and see if our column exists, and if this UUID has been written...
+	var uuid spanner.NullString
+	var move int64
+
 	if err != nil {
+		// If we have a real error, bail.
 		if spanner.ErrCode(err) != codes.NotFound {
 			return err
 		}
+		// Not found, which means a new counter we've never seen, so we skip
+		// all further checks and exit if here.
 	} else {
-		var ap bool
-		err = row.ColumnByName("Applied", &ap)
+		// Try to get our UUID
+		err = row.ColumnByName("UUID", &uuid)
+		// Real error, bail.
 		if err != nil {
 			return err
 		}
-		if ap {
+		// If the UUID exists in the database, bail, the operation has already been
+		// applied.
+		if uuid.Valid {
 			return nil
 		}
-	}
-
-	// Let's get our current count
-	var move int64
-	row, err = rw.ReadRow(context.Background(), "sheep", spanner.Key{msg.Keyspace, msg.Key, msg.Name}, []string{"Count"})
-	if err != nil {
-		if spanner.ErrCode(err) != codes.NotFound {
+		// Get the count.
+		err = row.ColumnByName("Count", &move)
+		if err != nil {
 			return err
 		}
-	} else {
-		row.ColumnByName("Count", &move)
 	}
 
 	// Now we'll do our operation.
