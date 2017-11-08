@@ -110,20 +110,15 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 	shard := rand.Intn(shards)
 
 	// First, let's check and see if our message has been written.
-	row, err := rw.ReadRow(context.Background(), "sheep_transaction", spanner.Key{msg.Keyspace, msg.Key, msg.Name, msg.UUID}, []string{"Applied"})
+	row, err := rw.ReadRow(context.Background(), "sheep_transaction", spanner.Key{msg.Keyspace, msg.Key, msg.Name, msg.UUID}, []string{"UUID"})
 	if err != nil {
 		if spanner.ErrCode(err) != codes.NotFound {
 			return err
 		}
-	} else {
-		var ap bool
-		err = row.ColumnByName("Applied", &ap)
-		if err != nil {
-			return err
-		}
-		if ap {
-			return nil
-		}
+	} else if err == nil {
+		// We need to return if err is nil, this means
+		// the UUID was found.
+		return nil
 	}
 
 	// Let's get our current count
@@ -173,8 +168,8 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 
 	m = append(m, spanner.InsertOrUpdate(
 		"sheep_transaction",
-		[]string{"Keyspace", "Key", "Name", "Shard", "UUID", "Time"},
-		[]interface{}{msg.Keyspace, msg.Key, msg.Name, shard, msg.UUID, time.Now()}))
+		[]string{"Keyspace", "Key", "Name", "UUID", "Time"},
+		[]interface{}{msg.Keyspace, msg.Key, msg.Name, msg.UUID, time.Now()}))
 
 	// ...and write!
 	return rw.BufferWrite(m)
@@ -202,11 +197,9 @@ func (s *Spanner) createSpannerDatabase(ctx context.Context, project, instance, 
 							Keyspace 	STRING(MAX) NOT NULL,
 							Key 			STRING(MAX) NOT NULL,
 							Name			STRING(MAX) NOT NULL,
-							Shard     INT64       NOT NULL,
 							UUID 			STRING(128) NOT NULL,
 							Time      TIMESTAMP   NOT NULL
-					) PRIMARY KEY (Keyspace, Key, Name, Shard, UUID),
-						INTERLEAVE IN PARENT sheep ON DELETE CASCADE`,
+					) PRIMARY KEY (Keyspace, Key, Name, UUID)`,
 			},
 		})
 
