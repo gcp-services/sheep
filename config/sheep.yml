@@ -25,6 +25,7 @@ pubsub:
 
 spanner:
   enabled: true
+  shards: 10
   project: jinked-home
   instance: sheep-test
   database: sheep

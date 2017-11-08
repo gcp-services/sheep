@@ -7,6 +7,7 @@ import (
 
 func setDefaults() {
 	viper.SetDefault("spanner.enabled", false)
+	viper.SetDefault("spanner.shards", 1)
 	viper.SetDefault("pubsub.enabled", false)
 	viper.SetDefault("rabbitmq.enabled", false)
 	viper.SetDefault("cockroachdb.enabled", false)

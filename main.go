@@ -145,7 +145,7 @@ func stopWebserver() {
 func setupLogging() {
 	// If we're in a terminal, pretty print
 	if terminal.IsTerminal(int(os.Stdout.Fd())) {
-		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout}).Level(zerolog.InfoLevel)
 		log.Info().Msg("Detected terminal, pretty logging enabled.")
 	}
 }

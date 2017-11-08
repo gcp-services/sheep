@@ -3,9 +3,13 @@ package database
 import (
 	"context"
 	"fmt"
+	"math/rand"
+	"time"
 
 	"cloud.google.com/go/spanner"
 	database "cloud.google.com/go/spanner/admin/database/apiv1"
+	"github.com/rs/zerolog/log"
+	"github.com/spf13/viper"
 	adminpb "google.golang.org/genproto/googleapis/spanner/admin/database/v1"
 	"google.golang.org/grpc/codes"
 )
@@ -51,18 +55,43 @@ func NewSpanner(project, instance, db string) (*Spanner, error) {
 }
 
 func (s *Spanner) Read(msg *Message) error {
-	row, err := s.client.Single().ReadRow(
-		context.Background(),
-		"sheep",
-		spanner.Key{msg.Keyspace, msg.Key, msg.Name},
-		[]string{"Count"},
-	)
+
+	stmt := spanner.NewStatement(`
+		SELECT SUM(a.Count) as Count
+		FROM sheep as a
+		WHERE a.Keyspace=@Keyspace
+		AND a.Key=@Key
+		AND a.Name=@Name	
+	`)
+	stmt.Params["Keyspace"] = msg.Keyspace
+	stmt.Params["Key"] = msg.Key
+	stmt.Params["Name"] = msg.Name
+
+	iter := s.client.Single().Query(context.Background(), stmt)
+	defer iter.Stop()
+
+	row, err := iter.Next()
 
 	if err != nil {
 		return err
 	}
 
-	return row.ColumnByName("Count", &msg.Value)
+	var value spanner.NullInt64
+	err = row.ColumnByName("Count", &value)
+
+	if err != nil {
+		return err
+	}
+
+	if value.Valid {
+		msg.Value = value.Int64
+		return nil
+	}
+
+	return &spanner.Error{
+		Code: codes.NotFound,
+		Desc: "counter not found",
+	}
 }
 
 func (s *Spanner) Save(message *Message) error {
@@ -74,9 +103,11 @@ func (s *Spanner) Save(message *Message) error {
 // Here's where the magic happens. Save out message!
 func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) error {
 	msg := ctx.Value(contextKey("message")).(*Message)
+	shards := viper.GetInt("spanner.shards")
+	shard := rand.Intn(shards)
 
 	stmt := spanner.NewStatement(`
-  SELECT a.Count,
+  SELECT SUM(a.Count) as Count,
 		(SELECT b.UUID
      FROM sheep_transaction AS b
      WHERE b.Keyspace=@Keyspace
@@ -87,22 +118,24 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
   FROM sheep as a
   WHERE a.Keyspace=@Keyspace
   AND a.Key=@Key
-  AND a.Name=@Name
+	AND a.Name=@Name
+	AND a.Shard=@Shard
 	`)
 
 	stmt.Params["Keyspace"] = msg.Keyspace
 	stmt.Params["Key"] = msg.Key
 	stmt.Params["Name"] = msg.Name
 	stmt.Params["UUID"] = msg.UUID
+	stmt.Params["Shard"] = shard
 
 	iter := rw.Query(ctx, stmt)
 	row, err := iter.Next()
-	iter.Stop()
+	defer iter.Stop()
 
 	// Let's check and see if our column exists, and if this UUID has been written...
 	var uuid spanner.NullString
 	var move int64
-
+	log.Debug().Interface("row", row).Msg("Query resut for operation")
 	if err != nil {
 		// If we have a real error, bail.
 		if spanner.ErrCode(err) != codes.NotFound {
@@ -122,10 +155,16 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 		if uuid.Valid {
 			return nil
 		}
+
 		// Get the count.
-		err = row.ColumnByName("Count", &move)
+		var sm spanner.NullInt64
+		err = row.ColumnByName("Count", &sm)
 		if err != nil {
 			return err
+		}
+		if sm.Valid {
+			log.Debug().Int64("count", sm.Int64).Msg("Count on reply")
+			move = sm.Int64
 		}
 	}
 
@@ -144,18 +183,29 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 		}
 	}
 
-	// Build our mutation...
-	m := []*spanner.Mutation{
-		spanner.InsertOrUpdate(
+	m := []*spanner.Mutation{}
+
+	log.Debug().Int("shard", shard).Msg("shard selected for op")
+	if msg.Operation == "set" {
+		for i := 0; i < shards; i++ {
+			m = append(m, spanner.InsertOrUpdate(
+				"sheep",
+				[]string{"Keyspace", "Key", "Name", "Shard", "Count"},
+				[]interface{}{msg.Keyspace, msg.Key, msg.Name, i, move},
+			))
+		}
+	} else {
+		m = append(m, spanner.InsertOrUpdate(
 			"sheep",
-			[]string{"Keyspace", "Key", "Name", "Count"},
-			[]interface{}{msg.Keyspace, msg.Key, msg.Name, move},
-		),
-		spanner.InsertOrUpdate(
-			"sheep_transaction",
-			[]string{"Keyspace", "Key", "Name", "UUID", "Applied"},
-			[]interface{}{msg.Keyspace, msg.Key, msg.Name, msg.UUID, true}),
+			[]string{"Keyspace", "Key", "Name", "Shard", "Count"},
+			[]interface{}{msg.Keyspace, msg.Key, msg.Name, shard, move},
+		))
 	}
+
+	m = append(m, spanner.InsertOrUpdate(
+		"sheep_transaction",
+		[]string{"Keyspace", "Key", "Name", "Shard", "UUID", "Time"},
+		[]interface{}{msg.Keyspace, msg.Key, msg.Name, shard, msg.UUID, time.Now()}))
 
 	// ...and write!
 	return rw.BufferWrite(m)
@@ -176,15 +226,17 @@ func (s *Spanner) createSpannerDatabase(ctx context.Context, project, instance, 
 							Keyspace 	STRING(MAX) NOT NULL,
 							Key 			STRING(MAX) NOT NULL,
 							Name			STRING(MAX) NOT NULL,
-							Count 		INT64
-					) PRIMARY KEY (Keyspace, Key, Name)`,
+							Shard     INT64       NOT NULL,
+							Count 		INT64       NOT NULL
+					) PRIMARY KEY (Keyspace, Key, Name, Shard)`,
 				`CREATE TABLE sheep_transaction (
 							Keyspace 	STRING(MAX) NOT NULL,
 							Key 			STRING(MAX) NOT NULL,
 							Name			STRING(MAX) NOT NULL,
+							Shard     INT64       NOT NULL,
 							UUID 			STRING(128) NOT NULL,
-							Applied 	BOOL
-					) PRIMARY KEY (Keyspace, Key, Name, UUID),
+							Time      TIMESTAMP   NOT NULL
+					) PRIMARY KEY (Keyspace, Key, Name, Shard, UUID),
 						INTERLEAVE IN PARENT sheep ON DELETE CASCADE`,
 			},
 		})
