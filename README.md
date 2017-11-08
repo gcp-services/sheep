@@ -11,7 +11,7 @@ Sheep is a distributed, idempotent, and eventually consistent counter service ba
 
 Sheep is built to scale. By leveraging scalable systems and designs, Sheep allows you to keep fully idempotent and accurate counts at a rate of hudreds of thousands of requests a second.
 
-Backends are pluggable, with current support for Google Spanner and CockroachDB(WIP) on the storage side, and with Google Pub/Sub and RabbitMQ(WIP) support on the transport side.
+Backends are pluggable, with current support for Google Spanner on the storage side, and with Google Pub/Sub support on the transport side. Support for CockroachDB and RabbitMQ are coming soon.
 
 ## How It Works
 
