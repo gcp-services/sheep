@@ -66,7 +66,11 @@ func (s *Spanner) Read(msg *Message) error {
 	stmt.Params["Key"] = msg.Key
 	stmt.Params["Name"] = msg.Name
 
-	iter := s.client.Single().Query(context.Background(), stmt)
+	// TODO: Expose this stale time.
+	iter := s.client.
+		Single().
+		WithTimestampBound(spanner.MaxStaleness(5*time.Second)).
+		Query(context.Background(), stmt)
 	defer iter.Stop()
 
 	row, err := iter.Next()
