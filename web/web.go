@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/rakyll/statik/fs"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/viper"
 
 	_ "github.com/Cidan/sheep/statik"
 )
@@ -29,7 +30,8 @@ func (h *Handler) Embed(e *echo.Echo) error {
 }
 
 func (h *Handler) Register(e *echo.Echo) error {
-	log.Info().Msg("Serving UI from web/assets/dist")
-	e.Static("/ui", "web/assets/dist")
+	path := viper.GetString("ui.path")
+	log.Info().Str("path", path).Msg("Serving UI from path")
+	e.Static("/ui", path)
 	return nil
 }

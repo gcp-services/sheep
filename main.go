@@ -127,7 +127,7 @@ func setupWebserver(stream database.Stream, database database.Database) {
 
 	// Create our UI handler
 	ui := web.New()
-	if viper.GetBool("dev") {
+	if viper.GetString("ui.path") != "" {
 		ui.Register(e)
 	} else {
 		ui.Embed(e)
@@ -154,7 +154,20 @@ func stopWebserver() {
 func setupLogging() {
 	// If we're in a terminal, pretty print
 	if terminal.IsTerminal(int(os.Stdout.Fd())) {
-		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout}).Level(zerolog.InfoLevel)
+		var level zerolog.Level
+		switch viper.GetString("level") {
+		case "info":
+			level = zerolog.InfoLevel
+		case "warn":
+			level = zerolog.WarnLevel
+		case "error":
+			level = zerolog.ErrorLevel
+		case "debug":
+			level = zerolog.DebugLevel
+		default:
+			level = zerolog.InfoLevel
+		}
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout}).Level(level)
 		log.Info().Msg("Detected terminal, pretty logging enabled.")
 	}
 }
