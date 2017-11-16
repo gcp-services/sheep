@@ -4,6 +4,9 @@ worker: true
 # When in direct mode, the master will write
 # directly to the database.
 direct: false
+# Disable the embedded assets for the UI, use folder
+# on the fs
+dev: true
 
 rabbitmq:
   enabled: false

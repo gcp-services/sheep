@@ -127,7 +127,11 @@ func setupWebserver(stream database.Stream, database database.Database) {
 
 	// Create our UI handler
 	ui := web.New()
-	ui.Register(e)
+	if viper.GetBool("dev") {
+		ui.Register(e)
+	} else {
+		ui.Embed(e)
+	}
 
 	// Create our v1 API
 	v1 := api.New(&stream, &database)

@@ -3,3 +3,4 @@ debug
 debug.test
 node_modules
 web/dist/**
+statik
