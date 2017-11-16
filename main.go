@@ -11,6 +11,7 @@ import (
 	"github.com/Cidan/sheep/config"
 	"github.com/Cidan/sheep/database"
 	"github.com/Cidan/sheep/util"
+	"github.com/Cidan/sheep/web"
 	"github.com/labstack/echo"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -123,6 +124,10 @@ func setupWebserver(stream database.Stream, database database.Database) {
 	e.GET("/healthz", func(c echo.Context) error {
 		return c.String(200, "ok")
 	})
+
+	// Create our UI handler
+	ui := web.New()
+	ui.Register(e)
 
 	// Create our v1 API
 	v1 := api.New(&stream, &database)
