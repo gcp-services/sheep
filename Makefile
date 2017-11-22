@@ -1,5 +1,5 @@
 build:
-	${GOPATH}/bin/statik -src=web/assets/dist
+	${GOPATH}/bin/statik -f -src=web/assets/dist
 	go build
 	go install
 

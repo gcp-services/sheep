@@ -10,6 +10,7 @@ import (
 	"github.com/Cidan/sheep/api"
 	"github.com/Cidan/sheep/config"
 	"github.com/Cidan/sheep/database"
+	"github.com/Cidan/sheep/stats"
 	"github.com/Cidan/sheep/util"
 	"github.com/Cidan/sheep/web"
 	"github.com/labstack/echo"
@@ -24,23 +25,29 @@ var e *echo.Echo
 func main() {
 	setupLogging()
 	config.Setup("")
+
 	stream, err := setupQueue()
 	if err != nil {
 		log.Panic().Err(err).Msg("Could not setup queue")
 	}
+
 	database, err := setupDatabase()
 	if err != nil {
 		log.Panic().Err(err).Msg("Could not setup database")
 	}
 
+	if viper.GetBool("stats.enabled") {
+		stats.Setup(database)
+	}
+
 	if viper.GetBool("worker") {
 		go setupWorker(stream, database)
-		// Do something
 	}
 
 	if viper.GetBool("master") {
 		go setupWebserver(stream, database)
 	}
+
 	util.WaitForSigInt()
 
 	log.Info().Msg("Shutting down...")
