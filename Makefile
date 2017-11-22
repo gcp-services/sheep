@@ -14,4 +14,9 @@ test:
 run:
 	${GOPATH}/bin/sheep
 
+init:
+	go get github.com/rakyll/statik
+	mkdir -p web/assets/dist
+	cd web/assets && npm install
+
 .PHONY: test web
