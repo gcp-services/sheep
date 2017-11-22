@@ -201,6 +201,13 @@ func (s *Spanner) createSpannerDatabase(ctx context.Context, project, instance, 
 							UUID 			STRING(128) NOT NULL,
 							Time      TIMESTAMP   NOT NULL
 					) PRIMARY KEY (Keyspace, Key, Name, UUID)`,
+				`CREATE TABLE sheep_stats (
+					   UUID      STRING(MAX) NOT NULL,
+						 Key       STRING(MAX) NOT NULL,
+						 Value     FLOAT64     NOT NULL,
+						 Hostname  STRING(MAX) NOT NULL,
+						 Last      TIMESTAMP   NOT NULL
+				 ) PRIMARY KEY (UUID, Key)`,
 			},
 		})
 
