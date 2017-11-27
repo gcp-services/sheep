@@ -1,5 +1,5 @@
-hash: cc21f4b7112a5e15306f14604e563a34a922e41e00e9554b062b1f95003b4d35
-updated: 2017-11-06T10:20:58.587950783-08:00
+hash: fd51a5a222f5e352f3149fdbc94f6a1db9763c11ba51c792e97647cfdda38b1b
+updated: 2017-11-27T10:46:00.677617304-08:00
 imports:
 - name: cloud.google.com/go
   version: 2d3a6656c17a60b0815b7e06ab0be04eacb6e613
@@ -16,12 +16,14 @@ imports:
   - pubsub/apiv1
   - spanner
   - spanner/admin/database/apiv1
+- name: github.com/denisbrodbeck/machineid
+  version: e59b4a9b1b28de48436e47104472050658bacfcf
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/protobuf
-  version: 1643683e1b54a9e88ad26d98f81400c8c9d9f4f9
+  version: 1e59b77b52bf8e4b449a57e6f79f21226d571845
   subpackages:
   - proto
   - protoc-gen-go/descriptor
@@ -45,26 +47,30 @@ imports:
   - json/scanner
   - json/token
 - name: github.com/labstack/echo
-  version: cec7629194fe4bf83b0c72d9a02d340c7a1468ac
+  version: 0473c51f1dbd83487effce00702571d19033a6e5
 - name: github.com/labstack/gommon
   version: 57409ada9da0f2afad6664c49502f8c50fbd8476
   subpackages:
   - color
   - log
 - name: github.com/lib/pq
-  version: b609790bd85edf8e9ab7e0f8912750a786177bcf
+  version: 83612a56d3dd153a94a629cd64925371c9adad78
   subpackages:
   - oid
 - name: github.com/magiconair/properties
   version: 49d762b9817ba1c2e9d0c69183c2b4a8b8f1d934
 - name: github.com/mattn/go-colorable
-  version: ad5389df28cdac544c99bd7b9161a0b5b6ca9d1b
+  version: 6fcc0c1fd9b620311d821b106a400b35dc95c497
 - name: github.com/mattn/go-isatty
-  version: a5cdd64afdee435007ee3e9f6ed4684af949d568
+  version: 6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c
 - name: github.com/mitchellh/mapstructure
   version: 06020f85339e21b2478f756a78e295255ffa4d6a
 - name: github.com/pelletier/go-toml
   version: 4e9e0ee19b60b13eb79915933f44d8ed5f268bdd
+- name: github.com/rakyll/statik
+  version: 016ca6fdb1b26618ff8f53fbd1109ff834524f23
+  subpackages:
+  - fs
 - name: github.com/rs/zerolog
   version: 3ac71fc58dbd43122668a912b755b0979ba9ce1f
   subpackages:
@@ -73,7 +79,7 @@ imports:
 - name: github.com/satori/go.uuid
   version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: github.com/spf13/afero
-  version: 5660eeed305fe5f69c8fc6cf899132a459a97064
+  version: 8d919cbe7e2627e417f3e45c3c0e489a5b7e2536
   subpackages:
   - mem
 - name: github.com/spf13/cast
@@ -95,13 +101,13 @@ imports:
 - name: github.com/valyala/fasttemplate
   version: dcecefd839c4193db0d35b88ec65b4c12d360ab0
 - name: golang.org/x/crypto
-  version: 687d4b818545e443c8ba223cbef20b1721afd4db
+  version: b080dc9a8c480b08e698fb1219160d598526310f
   subpackages:
   - acme
   - acme/autocert
   - ssh/terminal
 - name: golang.org/x/net
-  version: 01c190206fbdffa42f334f4b2bf2220f50e64920
+  version: c7086645de248775cbf2373cf5ca4d2fa664b8c1
   subpackages:
   - context
   - context/ctxhttp
@@ -112,7 +118,7 @@ imports:
   - lex/httplex
   - trace
 - name: golang.org/x/oauth2
-  version: 9ff8ebcc8e241d46f52ecc5bff0e5a2f2dbef402
+  version: f95fa95eaa936d9d87489b15d1d18b97c1ba9c28
   subpackages:
   - google
   - internal
@@ -124,7 +130,7 @@ imports:
   - errgroup
   - semaphore
 - name: golang.org/x/sys
-  version: d4266bc12aae0b4128952c889b769442fce5d2f1
+  version: 096928d58be70ff96328b9a13ab90a68f646398b
   subpackages:
   - unix
   - windows
@@ -136,7 +142,7 @@ imports:
   - unicode/bidi
   - unicode/norm
 - name: google.golang.org/api
-  version: 9fdb53e0c633e09f7df19c7745ee0e39ce3f5e6a
+  version: b804618854e387dc7fdd9e50496183ddcbb4b120
   subpackages:
   - googleapi/transport
   - internal
@@ -161,7 +167,7 @@ imports:
   - socket
   - urlfetch
 - name: google.golang.org/genproto
-  version: 11c7f9e547da6db876260ce49ea7536985904c9b
+  version: 7f0da29060c682909f650ad8ed4e515bd74fa12a
   subpackages:
   - googleapis/api/annotations
   - googleapis/iam/v1
@@ -173,7 +179,7 @@ imports:
   - googleapis/spanner/v1
   - protobuf/field_mask
 - name: google.golang.org/grpc
-  version: 4318e6475c4b2660f7b8ddb77a4504da77311504
+  version: 10873b30bf245efc365a957b425da2e15f47a560
   subpackages:
   - balancer
   - balancer/roundrobin
@@ -197,7 +203,7 @@ imports:
   - tap
   - transport
 - name: gopkg.in/yaml.v2
-  version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
+  version: 287cf08546ab5e7e37d55a84f7ed3fd1db036de5
 testImports:
 - name: github.com/davecgh/go-spew
   version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9

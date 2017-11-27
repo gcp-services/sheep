@@ -1,16 +1,34 @@
 package stats
 
 import (
+	"os"
 	"sync"
+
+	"github.com/denisbrodbeck/machineid"
+	"github.com/rs/zerolog/log"
 )
 
 type Stats struct {
-	metrics *sync.Map
+	hostname string
+	uuid     string
+	metrics  *sync.Map
 }
 
 func New() *Stats {
+	host, err := os.Hostname()
+	if err != nil {
+		log.Panic().Err(err).Msg("error when obtaining hostname")
+	}
+
+	id, err := machineid.ProtectedID("sheep")
+	if err != nil {
+		log.Panic().Err(err).Msg("unable to obtain machine unique id")
+	}
+
 	s := &Stats{
-		metrics: new(sync.Map),
+		hostname: host,
+		uuid:     id,
+		metrics:  new(sync.Map),
 	}
 	return s
 }
