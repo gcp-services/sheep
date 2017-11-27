@@ -2,18 +2,14 @@ package stats
 
 import (
 	"sync"
-
-	"github.com/Cidan/sheep/database"
 )
 
 type Stats struct {
-	db      database.Database
 	metrics *sync.Map
 }
 
-func New(db database.Database) *Stats {
+func New() *Stats {
 	s := &Stats{
-		db:      db,
 		metrics: new(sync.Map),
 	}
 	return s

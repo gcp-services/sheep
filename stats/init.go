@@ -3,15 +3,14 @@ package stats
 import (
 	"time"
 
-	"github.com/Cidan/sheep/database"
 	"github.com/rs/zerolog/log"
 )
 
 var metrics *Stats
 
-func Setup(db database.Database) {
+func Setup() {
 	log.Info().Msg("Setting up internal stats tracking")
-	metrics = New(db)
+	metrics = New()
 	go func() {
 		for {
 			metrics.Save()

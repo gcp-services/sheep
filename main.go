@@ -37,7 +37,7 @@ func main() {
 	}
 
 	if viper.GetBool("stats.enabled") {
-		stats.Setup(database)
+		stats.Setup()
 	}
 
 	if viper.GetBool("worker") {
