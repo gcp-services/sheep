@@ -27,6 +27,13 @@ func Gauge(name string, value float64) {
 	metrics.Gauge(name, value)
 }
 
+func Incr(name string, value float64) {
+	if metrics == nil {
+		return
+	}
+	metrics.Incr(name, value)
+}
+
 func Get(name string) float64 {
 	if metrics == nil {
 		return 0

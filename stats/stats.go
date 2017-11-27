@@ -23,6 +23,11 @@ func (s *Stats) Gauge(name string, value float64) {
 	s.metrics.Store(name, value)
 }
 
+func (s *Stats) Incr(name string, value float64) {
+	v, _ := s.metrics.LoadOrStore(name, 0)
+	s.metrics.Store(name, v.(float64)+value)
+}
+
 func (s *Stats) Get(name string) float64 {
 	value, _ := s.metrics.LoadOrStore(name, 0)
 	// TODO check type when adding different types
