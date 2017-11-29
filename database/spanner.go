@@ -109,7 +109,7 @@ func (s *Spanner) Save(message *Message) error {
 	return nil
 }
 
-// Here's where the magic happens. Save out message!
+// Here's where the magic happens. Save our message!
 func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) error {
 	msg := ctx.Value(contextKey("message")).(*Message)
 	shards := viper.GetInt("spanner.shards")
