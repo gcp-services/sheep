@@ -1,7 +1,7 @@
 build:
 	${GOPATH}/bin/statik -f -src=web/assets/dist
-	go build
-	go install
+	go build ./...
+	go install ./...
 
 web:
 	cd web/assets && npm run build
@@ -11,6 +11,9 @@ test:
 	go vet ./...
 	go test -covermode=atomic ./...
 
+demo:
+	${GOPATH}/bin/demo
+	
 run:
 	${GOPATH}/bin/sheep
 
