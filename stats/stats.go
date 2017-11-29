@@ -38,8 +38,8 @@ func (s *Stats) Gauge(name string, value float64) {
 }
 
 func (s *Stats) Incr(name string, value float64) {
-	v, _ := s.metrics.LoadOrStore(name, 0)
-	s.metrics.Store(name, v.(float64)+value)
+	//v, _ := s.metrics.LoadOrStore(name, 0)
+	//s.metrics.Store(name, v.(float64)+value)
 }
 
 func (s *Stats) Get(name string) float64 {
