@@ -10,10 +10,11 @@ services:
 before_install:
   - docker-compose up -d
 install:
-  - go get github.com/rakyll/statik
   - go get -v github.com/Masterminds/glide
   - cd $GOPATH/src/github.com/Masterminds/glide && git checkout 245caced2b16358b1c5e267691b17e9ee9952127 && go install && cd -
   - glide install
 script:
+  - make init
+  - make web
   - make
   - make test
