@@ -8,6 +8,9 @@ import (
 )
 
 func TestNewPubsub(t *testing.T) {
+	if !acc {
+		return
+	}
 	// The pubsub emulator doesn't support exists() checks it seems.
 	//os.Setenv("PUBSUB_EMULATOR_HOST", "localhost:8085")
 	_, err := NewPubsub("jinked-home", "tests", "tests")
@@ -15,6 +18,9 @@ func TestNewPubsub(t *testing.T) {
 }
 
 func TestPubsubSaveAndRead(t *testing.T) {
+	if !acc {
+		return
+	}
 	p, err := NewPubsub("jinked-home", "tests", "tests")
 	assert.Nil(t, err)
 

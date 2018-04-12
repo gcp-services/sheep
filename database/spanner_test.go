@@ -12,6 +12,9 @@ func TestSetupSpanner(t *testing.T) {
 }
 
 func TestSpannerSave(t *testing.T) {
+	if !acc {
+		return
+	}
 	config.SetDefaults()
 	sp, err := NewSpanner("jinked-home", "sheep-test", "sheep")
 	assert.Nil(t, err)

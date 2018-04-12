@@ -33,6 +33,6 @@ func Setup(path string) {
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Fatal().Err(err).Msg("Unable to read config")
+		log.Warn().Err(err).Msg("unable to read config, using defaults")
 	}
 }

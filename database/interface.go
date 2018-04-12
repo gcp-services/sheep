@@ -1,6 +1,11 @@
 package database
 
-import "context"
+import (
+	"context"
+	"flag"
+)
+
+var acc = *flag.Bool("acc", false, "Run full acceptance tests")
 
 type Stream interface {
 	Save(*Message) error
