@@ -38,3 +38,18 @@ func (q *MockQueue) Save(m *Message) error {
 func (q *MockQueue) Read(ctx context.Context, fn MessageFn) error {
 	return nil
 }
+
+// TODO: implement cancel channel
+func (q *MockQueue) StartWork(db Database) {
+	go q.Read(context.Background(), func(msg *Message) bool {
+		err := db.Save(msg)
+		if err != nil {
+			return false
+		}
+		return true
+	})
+}
+
+func (q *MockQueue) StopWork() {
+
+}

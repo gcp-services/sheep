@@ -22,6 +22,8 @@ func setupWeb() (*Handler, error) {
 		return nil, err
 	}
 
+	q.StartWork(db)
+
 	return New(&q, &db), nil
 }
 

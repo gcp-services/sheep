@@ -105,3 +105,11 @@ func (p *Pubsub) Save(message *Message) error {
 	}
 	return nil
 }
+
+func (p *Pubsub) StartWork(db Database) {
+
+}
+
+func (p *Pubsub) StopWork() {
+
+}

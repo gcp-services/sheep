@@ -53,7 +53,7 @@ func main() {
 	log.Info().Msg("Shutting down...")
 }
 
-//
+// TODO: This should be a function of the Stream
 func setupWorker(stream database.Stream, db database.Database) {
 	// TODO: Add context
 	// TODO: This can drop into an infinite loop if an error is permanently fatal

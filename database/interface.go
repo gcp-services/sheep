@@ -10,6 +10,8 @@ var acc = *flag.Bool("acc", false, "Run full acceptance tests")
 type Stream interface {
 	Save(*Message) error
 	Read(context.Context, MessageFn) error
+	StartWork(Database)
+	StopWork()
 }
 
 type Database interface {

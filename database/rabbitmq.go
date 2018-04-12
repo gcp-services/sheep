@@ -53,6 +53,14 @@ func (r *RabbitMQ) Save(message *Message) error {
 	return r.connections[0].Channels[0].Channel.TxCommit()
 }
 
+func (r *RabbitMQ) StartWork(db Database) {
+
+}
+
+func (r *RabbitMQ) StopWork() {
+
+}
+
 func newConnection(host string) *Connection {
 	c := &Connection{
 		host:   host,
