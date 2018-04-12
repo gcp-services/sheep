@@ -16,11 +16,11 @@ func SetupMockQueue() Stream {
 	return &MockQueue{}
 }
 
-func NewMockDatabase() (*MockDatabase, error) {
+func NewMockDatabase() (Database, error) {
 	return &MockDatabase{}, nil
 }
 
-func NewMockQueue() (*MockQueue, error) {
+func NewMockQueue() (Stream, error) {
 	return &MockQueue{}, nil
 }
 
