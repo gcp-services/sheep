@@ -5,7 +5,7 @@ build:
 
 web:
 	cd web/assets && npm run build
-	${GOPATH}/bin/statik -src=web/assets/dist
+	${GOPATH}/bin/statik -src=web/assets/dist -f
 
 test:
 	go vet ./...
