@@ -1,5 +1,5 @@
-hash: cc21f4b7112a5e15306f14604e563a34a922e41e00e9554b062b1f95003b4d35
-updated: 2017-11-06T10:20:58.587950783-08:00
+hash: fd51a5a222f5e352f3149fdbc94f6a1db9763c11ba51c792e97647cfdda38b1b
+updated: 2018-04-11T20:50:51.8902337-07:00
 imports:
 - name: cloud.google.com/go
   version: 2d3a6656c17a60b0815b7e06ab0be04eacb6e613
@@ -16,12 +16,14 @@ imports:
   - pubsub/apiv1
   - spanner
   - spanner/admin/database/apiv1
+- name: github.com/denisbrodbeck/machineid
+  version: f73c20e1eb0edb032f45bf995dd3875b12fa0531
 - name: github.com/fsnotify/fsnotify
-  version: 4da3e2cfbabc9f751898f250b49f2439785783a1
+  version: c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/protobuf
-  version: 1643683e1b54a9e88ad26d98f81400c8c9d9f4f9
+  version: e09c5db296004fbe3f74490e84dcd62c3c5ddb1b
   subpackages:
   - proto
   - protoc-gen-go/descriptor
@@ -32,12 +34,13 @@ imports:
   - ptypes/struct
   - ptypes/timestamp
 - name: github.com/googleapis/gax-go
-  version: 317e0006254c44a0ac427cc52a0e083ff0b9622f
+  version: de2cc08e690b99dd3f7d19937d80d3d54e04682f
 - name: github.com/hashicorp/hcl
-  version: 23c074d0eceb2b8a5bfdbb271ab780cde70f05a8
+  version: ef8a98b0bbce4a65b5aa4c368430a80ddc533168
   subpackages:
   - hcl/ast
   - hcl/parser
+  - hcl/printer
   - hcl/scanner
   - hcl/strconv
   - hcl/token
@@ -45,26 +48,30 @@ imports:
   - json/scanner
   - json/token
 - name: github.com/labstack/echo
-  version: cec7629194fe4bf83b0c72d9a02d340c7a1468ac
+  version: b338075a0fc6e1a0683dbf03d09b4957a289e26f
 - name: github.com/labstack/gommon
-  version: 57409ada9da0f2afad6664c49502f8c50fbd8476
+  version: 3bc2d333a4c30531c47051369043bcabd62ff4c0
   subpackages:
   - color
   - log
 - name: github.com/lib/pq
-  version: b609790bd85edf8e9ab7e0f8912750a786177bcf
+  version: d34b9ff171c21ad295489235aec8b6626023cd04
   subpackages:
   - oid
 - name: github.com/magiconair/properties
-  version: 49d762b9817ba1c2e9d0c69183c2b4a8b8f1d934
+  version: 2c9e9502788518c97fe44e8955cd069417ee89df
 - name: github.com/mattn/go-colorable
-  version: ad5389df28cdac544c99bd7b9161a0b5b6ca9d1b
+  version: efa589957cd060542a26d2dd7832fd6a6c6c3ade
 - name: github.com/mattn/go-isatty
-  version: a5cdd64afdee435007ee3e9f6ed4684af949d568
+  version: 6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c
 - name: github.com/mitchellh/mapstructure
-  version: 06020f85339e21b2478f756a78e295255ffa4d6a
+  version: 00c29f56e2386353d58c599509e8dc3801b0d716
 - name: github.com/pelletier/go-toml
-  version: 4e9e0ee19b60b13eb79915933f44d8ed5f268bdd
+  version: 66540cf1fcd2c3aee6f6787dfa32a6ae9a870f12
+- name: github.com/rakyll/statik
+  version: fcdcb7b85139b8b9ca1d8ef1d98d8593e90d117f
+  subpackages:
+  - fs
 - name: github.com/rs/zerolog
   version: 3ac71fc58dbd43122668a912b755b0979ba9ce1f
   subpackages:
@@ -73,19 +80,19 @@ imports:
 - name: github.com/satori/go.uuid
   version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: github.com/spf13/afero
-  version: 5660eeed305fe5f69c8fc6cf899132a459a97064
+  version: 63644898a8da0bc22138abf860edaf5277b6102e
   subpackages:
   - mem
 - name: github.com/spf13/cast
-  version: acbeb36b902d72a7a4c18e8f3241075e7ab763e4
+  version: 8965335b8c7107321228e3e3702cab9832751bac
 - name: github.com/spf13/jwalterweatherman
-  version: 12bd96e66386c1960ab0f74ced1362f66f552f7b
+  version: 7c0cea34c8ece3fbeb2b27ab9b59511d360fb394
 - name: github.com/spf13/pflag
-  version: 4c012f6dcd9546820e378d0bdda4d8fc772cdfea
+  version: 329ebf1e04800d11a25047832495199d366580f3
 - name: github.com/spf13/viper
-  version: 25b30aa063fc18e48662b86996252eabdcf2f0c7
+  version: b5e8006cbee93ec955a89ab31e0e3ce3204f3736
 - name: github.com/streadway/amqp
-  version: ff791c2d22d3f1588b4e2cc71a9fba5e1da90654
+  version: 8e4aba63da9fc5571e01c6a45dc809a58cbc5a68
 - name: github.com/stretchr/testify
   version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:
@@ -94,14 +101,30 @@ imports:
   version: e746df99fe4a3986f4d4f79e13c1e0117ce9c2f7
 - name: github.com/valyala/fasttemplate
   version: dcecefd839c4193db0d35b88ec65b4c12d360ab0
+- name: go.opencensus.io
+  version: 5710257e78ab540a7c6f0e203009abea60eb97b7
+  subpackages:
+  - exporter/stackdriver/propagation
+  - internal
+  - internal/tagencoding
+  - plugin/ocgrpc
+  - plugin/ochttp
+  - plugin/ochttp/propagation/b3
+  - stats
+  - stats/internal
+  - stats/view
+  - tag
+  - trace
+  - trace/internal
+  - trace/propagation
 - name: golang.org/x/crypto
-  version: 687d4b818545e443c8ba223cbef20b1721afd4db
+  version: d6449816ce06963d9d136eee5a56fca5b0616e7e
   subpackages:
   - acme
   - acme/autocert
   - ssh/terminal
 - name: golang.org/x/net
-  version: 01c190206fbdffa42f334f4b2bf2220f50e64920
+  version: 61147c48b25b599e5b561d2e9c4f3e1ef489ca41
   subpackages:
   - context
   - context/ctxhttp
@@ -112,31 +135,32 @@ imports:
   - lex/httplex
   - trace
 - name: golang.org/x/oauth2
-  version: 9ff8ebcc8e241d46f52ecc5bff0e5a2f2dbef402
+  version: 921ae394b9430ed4fb549668d7b087601bd60a81
   subpackages:
   - google
   - internal
   - jws
   - jwt
 - name: golang.org/x/sync
-  version: fd80eb99c8f653c847d294a001bdf2a3a6f768f5
+  version: 1d60e4601c6fd243af51cc01ddf169918a5407ca
   subpackages:
   - errgroup
   - semaphore
 - name: golang.org/x/sys
-  version: d4266bc12aae0b4128952c889b769442fce5d2f1
+  version: 3b87a42e500a6dc65dae1a55d0b641295971163e
   subpackages:
   - unix
   - windows
+  - windows/registry
 - name: golang.org/x/text
-  version: 88f656faf3f37f690df1a32515b479415e1a6769
+  version: 7922cc490dd5a7dbaa7fd5d6196b49db59ac042f
   subpackages:
   - secure/bidirule
   - transform
   - unicode/bidi
   - unicode/norm
 - name: google.golang.org/api
-  version: 9fdb53e0c633e09f7df19c7745ee0e39ce3f5e6a
+  version: dde16f2e838706995ab9946df55f5dc7c5564cc6
   subpackages:
   - googleapi/transport
   - internal
@@ -147,7 +171,7 @@ imports:
   - transport/grpc
   - transport/http
 - name: google.golang.org/appengine
-  version: 9d8544a6b2c7df9cff240fcf92d7b2f59bc13416
+  version: 150dc57a1b433e64154302bdc40b6bb8aefa313a
   subpackages:
   - internal
   - internal/app_identity
@@ -161,7 +185,7 @@ imports:
   - socket
   - urlfetch
 - name: google.golang.org/genproto
-  version: 11c7f9e547da6db876260ce49ea7536985904c9b
+  version: 51d0944304c3cbce4afe9e5247e21100037bff78
   subpackages:
   - googleapis/api/annotations
   - googleapis/iam/v1
@@ -173,15 +197,18 @@ imports:
   - googleapis/spanner/v1
   - protobuf/field_mask
 - name: google.golang.org/grpc
-  version: 4318e6475c4b2660f7b8ddb77a4504da77311504
+  version: db0f0713e3a7f295e167341b621b10cce1fb9ffe
   subpackages:
   - balancer
+  - balancer/base
   - balancer/roundrobin
+  - channelz
   - codes
   - connectivity
   - credentials
   - credentials/oauth
   - encoding
+  - encoding/proto
   - grpclb/grpc_lb_v1/messages
   - grpclog
   - internal
@@ -197,7 +224,7 @@ imports:
   - tap
   - transport
 - name: gopkg.in/yaml.v2
-  version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
+  version: 5420a8b6744d3b0345ab293f6fcba19c978f1183
 testImports:
 - name: github.com/davecgh/go-spew
   version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9

@@ -3,6 +3,7 @@ package api
 import (
 	"cloud.google.com/go/spanner"
 	"github.com/Cidan/sheep/database"
+	"github.com/Cidan/sheep/stats"
 	"github.com/labstack/echo"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
@@ -52,14 +53,18 @@ func (h *Handler) Get(c echo.Context) error {
 	err := h.Database.Read(msg)
 	if err != nil {
 		if spanner.ErrCode(err) == codes.NotFound {
+			stats.Incr("http.get.404", 1)
 			return c.JSON(404, echo.ErrNotFound)
 		}
+		stats.Incr("http.get.500", 1)
 		return err
 	}
+	stats.Incr("http.get.200", 1)
 	return c.JSON(200, msg)
 }
 
 func (h *Handler) Submit(c echo.Context, op string) error {
+	stat := "http." + op
 	msg := &database.Message{}
 	if err := c.Bind(msg); err != nil {
 		return err
@@ -67,14 +72,26 @@ func (h *Handler) Submit(c echo.Context, op string) error {
 
 	if err := validateMessage(msg); err != nil {
 		log.Error().Err(err).Msg("unable to put message")
+		stats.Incr(stat+".400", 1)
 		return c.JSON(400, err)
 	}
 
 	msg.Operation = op
 	if viper.GetBool("direct") || c.QueryParam("direct") == "true" {
-		return h.Database.Save(msg)
+		if err := h.Database.Save(msg); err != nil {
+			stats.Incr(stat+".500", 1)
+			return err
+		}
+		stats.Incr(stat+".200", 1)
+		return nil
 	}
-	return h.Stream.Save(msg)
+
+	if err := h.Stream.Save(msg); err != nil {
+		stats.Incr(stat+".500", 1)
+		return err
+	}
+	stats.Incr(stat+".200", 1)
+	return nil
 }
 
 func validateMessage(msg *database.Message) error {

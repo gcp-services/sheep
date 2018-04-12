@@ -4,6 +4,24 @@ worker: true
 # When in direct mode, the master will write
 # directly to the database.
 direct: false
+# Log Level
+level: debug
+
+ui:
+  enabled: true
+  # Disable the embedded assets for the UI, use folder
+  # on the fs
+  path: web/assets/dist
+
+# Enable prometheus instrumentation
+prometheus:
+  enabled: true
+  listen: :8080
+
+# Enable internal state logging, stored
+# in the active database configured below.
+stats:
+  enabled: true
 
 rabbitmq:
   enabled: false

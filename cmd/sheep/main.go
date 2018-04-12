@@ -10,7 +10,9 @@ import (
 	"github.com/Cidan/sheep/api"
 	"github.com/Cidan/sheep/config"
 	"github.com/Cidan/sheep/database"
+	"github.com/Cidan/sheep/stats"
 	"github.com/Cidan/sheep/util"
+	"github.com/Cidan/sheep/web"
 	"github.com/labstack/echo"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -23,23 +25,29 @@ var e *echo.Echo
 func main() {
 	setupLogging()
 	config.Setup("")
+
 	stream, err := setupQueue()
 	if err != nil {
 		log.Panic().Err(err).Msg("Could not setup queue")
 	}
+
 	database, err := setupDatabase()
 	if err != nil {
 		log.Panic().Err(err).Msg("Could not setup database")
 	}
 
+	if viper.GetBool("stats.enabled") {
+		stats.Setup()
+	}
+
 	if viper.GetBool("worker") {
 		go setupWorker(stream, database)
-		// Do something
 	}
 
 	if viper.GetBool("master") {
 		go setupWebserver(stream, database)
 	}
+
 	util.WaitForSigInt()
 
 	log.Info().Msg("Shutting down...")
@@ -124,6 +132,14 @@ func setupWebserver(stream database.Stream, database database.Database) {
 		return c.String(200, "ok")
 	})
 
+	// Create our UI handler
+	ui := web.New()
+	if viper.GetString("ui.path") != "" {
+		ui.Register(e)
+	} else {
+		ui.Embed(e)
+	}
+
 	// Create our v1 API
 	v1 := api.New(&stream, &database)
 	v1.Register(e)
@@ -145,7 +161,20 @@ func stopWebserver() {
 func setupLogging() {
 	// If we're in a terminal, pretty print
 	if terminal.IsTerminal(int(os.Stdout.Fd())) {
-		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout}).Level(zerolog.InfoLevel)
+		var level zerolog.Level
+		switch viper.GetString("level") {
+		case "info":
+			level = zerolog.InfoLevel
+		case "warn":
+			level = zerolog.WarnLevel
+		case "error":
+			level = zerolog.ErrorLevel
+		case "debug":
+			level = zerolog.DebugLevel
+		default:
+			level = zerolog.InfoLevel
+		}
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout}).Level(level)
 		log.Info().Msg("Detected terminal, pretty logging enabled.")
 	}
 }

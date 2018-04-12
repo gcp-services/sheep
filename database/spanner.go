@@ -8,6 +8,7 @@ import (
 
 	"cloud.google.com/go/spanner"
 	database "cloud.google.com/go/spanner/admin/database/apiv1"
+	"github.com/Cidan/sheep/stats"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	adminpb "google.golang.org/genproto/googleapis/spanner/admin/database/v1"
@@ -100,11 +101,15 @@ func (s *Spanner) Read(msg *Message) error {
 
 func (s *Spanner) Save(message *Message) error {
 	ctx := context.WithValue(context.Background(), contextKey("message"), message)
-	_, err := s.client.ReadWriteTransaction(ctx, s.doSave)
-	return err
+	if _, err := s.client.ReadWriteTransaction(ctx, s.doSave); err != nil {
+		stats.Incr("spanner.save.error", 1)
+		return err
+	}
+	stats.Incr("spanner.save.success", 1)
+	return nil
 }
 
-// Here's where the magic happens. Save out message!
+// Here's where the magic happens. Save our message!
 func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) error {
 	msg := ctx.Value(contextKey("message")).(*Message)
 	shards := viper.GetInt("spanner.shards")
@@ -201,6 +206,13 @@ func (s *Spanner) createSpannerDatabase(ctx context.Context, project, instance, 
 							UUID 			STRING(128) NOT NULL,
 							Time      TIMESTAMP   NOT NULL
 					) PRIMARY KEY (Keyspace, Key, Name, UUID)`,
+				`CREATE TABLE sheep_stats (
+					   UUID      STRING(MAX) NOT NULL,
+						 Key       STRING(MAX) NOT NULL,
+						 Value     FLOAT64     NOT NULL,
+						 Hostname  STRING(MAX) NOT NULL,
+						 Last      TIMESTAMP   NOT NULL
+				 ) PRIMARY KEY (UUID, Key)`,
 			},
 		})
 

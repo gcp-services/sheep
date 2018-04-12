@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/Cidan/sheep/config"
+	"github.com/Cidan/sheep/database"
 	"github.com/Cidan/sheep/util"
 	"github.com/stretchr/testify/assert"
 )
@@ -14,10 +15,10 @@ func TestSetupLogging(t *testing.T) {
 }
 func TestSetupWebserver(t *testing.T) {
 	config.Setup("")
-	db, err := setupDatabase()
+	db, err := database.NewMockDatabase()
 	assert.Nil(t, err)
 
-	stream, err := setupQueue()
+	stream, err := database.NewMockQueue()
 	assert.Nil(t, err)
 
 	go setupWebserver(stream, db)
@@ -27,12 +28,12 @@ func TestSetupWebserver(t *testing.T) {
 
 func TestSetupDatabase(t *testing.T) {
 	config.Setup("")
-	_, err := setupDatabase()
+	_, err := database.NewMockDatabase()
 	assert.Nil(t, err)
 }
 
 func TestSetupQueue(t *testing.T) {
 	config.Setup("")
-	_, err := setupQueue()
+	_, err := database.NewMockQueue()
 	assert.Nil(t, err)
 }
