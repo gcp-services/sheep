@@ -1,6 +1,9 @@
 package api
 
 import (
+	"bytes"
+	"encoding/json"
+	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
@@ -27,6 +30,10 @@ func setupWeb() (*Handler, error) {
 	return New(&q, &db), nil
 }
 
+func setupRequest() {
+
+}
+
 func TestNew(t *testing.T) {
 	web, err := setupWeb()
 	assert.Nil(t, err)
@@ -45,6 +52,36 @@ func TestRegister(t *testing.T) {
 }
 
 // TODO: Submit
+func TestSubmit(t *testing.T) {
+	m := &database.Message{
+		Keyspace: "testKeyspace",
+	}
+
+	data, _ := json.Marshal(m)
+
+	web, err := setupWeb()
+	assert.Nil(t, err)
+
+	e := echo.New()
+	req := httptest.NewRequest(echo.PUT, "/"+web.Version+"/incr", bytes.NewBuffer(data))
+	rec := httptest.NewRecorder()
+	req.Header.Set("Content-Type", "application/json")
+
+	c := e.NewContext(req, rec)
+	c.SetPath("/" + web.Version + "/incr")
+
+	// Broken Submit
+	if assert.NoError(t, web.Submit(c, "incr")) {
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+	}
+	/*
+		m.Key = "testKey"
+		m.Name = "testName"
+		if assert.NoError(t, web.Submit(c, "incr")) {
+			assert.Equal(t, http.StatusBadRequest, rec.Code)
+		}
+	*/
+}
 
 func TestGet(t *testing.T) {
 	web, err := setupWeb()
