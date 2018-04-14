@@ -14,6 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TODO: move db out of here
 func setupWeb() (*Handler, error) {
 	db, err := database.NewMockDatabase()
 	if err != nil {
@@ -30,8 +31,17 @@ func setupWeb() (*Handler, error) {
 	return New(&q, &db), nil
 }
 
-func setupRequest() {
+func setupRequest(m *database.Message, web *Handler) (*httptest.ResponseRecorder, echo.Context) {
+	data, _ := json.Marshal(m)
 
+	e := echo.New()
+	req := httptest.NewRequest(echo.PUT, "/"+web.Version+"/"+m.Operation, bytes.NewBuffer(data))
+	rec := httptest.NewRecorder()
+	req.Header.Set("Content-Type", "application/json")
+
+	c := e.NewContext(req, rec)
+	c.SetPath("/" + web.Version + "/" + m.Operation)
+	return rec, c
 }
 
 func TestNew(t *testing.T) {
@@ -51,36 +61,33 @@ func TestRegister(t *testing.T) {
 	web.Register(e)
 }
 
-// TODO: Submit
+// Test Submit for expected results (but not incr/decr/set it self)
 func TestSubmit(t *testing.T) {
 	m := &database.Message{
 		Keyspace: "testKeyspace",
 	}
 
-	data, _ := json.Marshal(m)
-
 	web, err := setupWeb()
 	assert.Nil(t, err)
 
-	e := echo.New()
-	req := httptest.NewRequest(echo.PUT, "/"+web.Version+"/incr", bytes.NewBuffer(data))
-	rec := httptest.NewRecorder()
-	req.Header.Set("Content-Type", "application/json")
-
-	c := e.NewContext(req, rec)
-	c.SetPath("/" + web.Version + "/incr")
+	rec, c := setupRequest(m, web)
 
 	// Broken Submit
-	if assert.NoError(t, web.Submit(c, "incr")) {
+	if assert.NoError(t, web.Submit(c, "nothing")) {
 		assert.Equal(t, http.StatusBadRequest, rec.Code)
 	}
-	/*
-		m.Key = "testKey"
-		m.Name = "testName"
-		if assert.NoError(t, web.Submit(c, "incr")) {
-			assert.Equal(t, http.StatusBadRequest, rec.Code)
-		}
-	*/
+
+	// TODO: loop and test every one of these missing keys individually
+	m.Operation = "incr"
+	m.Key = "testKey"
+	m.Name = "testName"
+	m.UUID = "abc"
+
+	rec, c = setupRequest(m, web)
+
+	if assert.NoError(t, web.Submit(c, "incr")) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+	}
 }
 
 func TestGet(t *testing.T) {

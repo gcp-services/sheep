@@ -16,24 +16,18 @@ type MockQueue struct {
 	c     chan bool
 }
 
-func SetupMockDatabase() Database {
+func NewMockDatabase() (Database, error) {
 	return &MockDatabase{
 		db:   make(map[string]int64),
 		log:  make(map[string]bool),
 		lock: sync.Mutex{},
-	}
-}
-
-func SetupMockQueue() Stream {
-	return &MockQueue{}
-}
-
-func NewMockDatabase() (Database, error) {
-	return &MockDatabase{}, nil
+	}, nil
 }
 
 func NewMockQueue() (Stream, error) {
-	return &MockQueue{}, nil
+	return &MockQueue{
+		c: make(chan bool),
+	}, nil
 }
 
 func (db *MockDatabase) Save(m *Message) error {
@@ -69,7 +63,7 @@ func (q *MockQueue) Save(m *Message) error {
 }
 
 func (q *MockQueue) Read(ctx context.Context, fn MessageFn) error {
-	switch {
+	select {
 	case <-q.c:
 		go func() {
 			var m *Message
