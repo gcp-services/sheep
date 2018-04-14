@@ -14,7 +14,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TODO: move db out of here
 func setupWeb() (*Handler, error) {
 	db, err := database.NewMockDatabase()
 	if err != nil {
@@ -63,28 +62,45 @@ func TestRegister(t *testing.T) {
 
 // Test Submit for expected results (but not incr/decr/set it self)
 func TestSubmit(t *testing.T) {
-	m := &database.Message{
-		Keyspace: "testKeyspace",
-	}
+	m := &database.Message{}
 
 	web, err := setupWeb()
 	assert.Nil(t, err)
 
+	// Keyspace Check
 	rec, c := setupRequest(m, web)
-
-	// Broken Submit
-	if assert.NoError(t, web.Submit(c, "nothing")) {
+	if assert.NoError(t, web.Submit(c, "incr")) {
 		assert.Equal(t, http.StatusBadRequest, rec.Code)
+		assert.Contains(t, string(rec.Body.Bytes()), "missing keyspace field")
 	}
 
-	// TODO: loop and test every one of these missing keys individually
-	m.Operation = "incr"
-	m.Key = "testKey"
-	m.Name = "testName"
-	m.UUID = "abc"
-
+	// Key check
+	m.Keyspace = "testKeyspace"
 	rec, c = setupRequest(m, web)
+	if assert.NoError(t, web.Submit(c, "incr")) {
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+		assert.Contains(t, string(rec.Body.Bytes()), "missing key field")
+	}
 
+	// Name check
+	m.Key = "testKey"
+	rec, c = setupRequest(m, web)
+	if assert.NoError(t, web.Submit(c, "incr")) {
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+		assert.Contains(t, string(rec.Body.Bytes()), "missing name field")
+	}
+
+	// UUID check
+	m.Name = "testName"
+	rec, c = setupRequest(m, web)
+	if assert.NoError(t, web.Submit(c, "incr")) {
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+		assert.Contains(t, string(rec.Body.Bytes()), "missing uuid field")
+	}
+
+	// Good request
+	m.UUID = "testUUID"
+	rec, c = setupRequest(m, web)
 	if assert.NoError(t, web.Submit(c, "incr")) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 	}

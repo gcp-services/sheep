@@ -70,13 +70,14 @@ func (h *Handler) Submit(c echo.Context, op string) error {
 		return err
 	}
 
+	msg.Operation = op
+
 	if err := validateMessage(msg); err != nil {
 		log.Error().Err(err).Msg("unable to put message")
 		stats.Incr(stat+".400", 1)
 		return c.JSON(400, err)
 	}
 
-	msg.Operation = op
 	if viper.GetBool("direct") || c.QueryParam("direct") == "true" {
 		if err := h.Database.Save(msg); err != nil {
 			stats.Incr(stat+".500", 1)
@@ -95,11 +96,11 @@ func (h *Handler) Submit(c echo.Context, op string) error {
 }
 
 func validateMessage(msg *database.Message) error {
-	if msg.Key == "" {
-		return echo.NewHTTPError(400, "invalid payload, missing key field")
-	}
 	if msg.Keyspace == "" {
 		return echo.NewHTTPError(400, "invalid payload, missing keyspace field")
+	}
+	if msg.Key == "" {
+		return echo.NewHTTPError(400, "invalid payload, missing key field")
 	}
 	if msg.Name == "" {
 		return echo.NewHTTPError(400, "invalid payload, missing name field")
