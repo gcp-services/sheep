@@ -130,7 +130,10 @@ func startGrpc(stream database.Stream, database database.Database) {
 	}
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterV1Server(grpcServer, &pb.API{})
+	pb.RegisterV1Server(grpcServer, &pb.API{
+		Stream:   stream,
+		Database: database,
+	})
 	log.Info().
 		Int("port", 5309).
 		Msg("Started gRPC server, you're good to go!")
