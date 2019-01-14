@@ -12,7 +12,7 @@ import (
 func TestSetupLogging(t *testing.T) {
 	setupLogging()
 }
-func TestSetupWebserver(t *testing.T) {
+func TestStartGrpc(t *testing.T) {
 	config.Setup("")
 	db, err := database.NewMockDatabase()
 	assert.Nil(t, err)
@@ -20,7 +20,7 @@ func TestSetupWebserver(t *testing.T) {
 	stream, err := database.NewMockQueue()
 	assert.Nil(t, err)
 
-	go setupWebserver(stream, db)
+	go startGrpc(stream, db)
 	assert.True(t, util.WaitForPort("localhost", 5309, 5))
 }
 
