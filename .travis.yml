@@ -10,6 +10,7 @@ before_install:
   - unzip protoc-3.6.1-linux-x86_64.zip
   - sudo mv include/* /usr/include/
   - sudo mv bin/* /usr/bin/
+  - sudo chmod +x /usr/bin/protoc
 install:
   - go get -v github.com/Masterminds/glide
   - cd $GOPATH/src/github.com/Masterminds/glide && git checkout 245caced2b16358b1c5e267691b17e9ee9952127 && go install && cd -
