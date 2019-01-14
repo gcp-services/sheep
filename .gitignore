@@ -4,3 +4,5 @@ debug.test
 node_modules
 web/dist/**
 statik
+api/v1/v1.pb.go
+api/v1/v1.pb.gw.go

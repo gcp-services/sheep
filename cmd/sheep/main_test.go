@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"testing"
 
 	"github.com/Cidan/sheep/config"
@@ -23,7 +22,6 @@ func TestSetupWebserver(t *testing.T) {
 
 	go setupWebserver(stream, db)
 	assert.True(t, util.WaitForPort("localhost", 5309, 5))
-	e.Shutdown(context.Background())
 }
 
 func TestSetupDatabase(t *testing.T) {

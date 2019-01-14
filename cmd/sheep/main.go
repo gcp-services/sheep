@@ -4,19 +4,22 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
+	"net/http"
 	"os"
-	"strings"
 
-	"github.com/Cidan/sheep/api"
+	pb "github.com/Cidan/sheep/api/v1"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+
 	"github.com/Cidan/sheep/config"
 	"github.com/Cidan/sheep/database"
-	"github.com/Cidan/sheep/stats"
 	"github.com/Cidan/sheep/util"
 	"github.com/labstack/echo"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh/terminal"
+	"google.golang.org/grpc"
 )
 
 var e *echo.Echo
@@ -35,16 +38,13 @@ func main() {
 		log.Panic().Err(err).Msg("Could not setup database")
 	}
 
-	if viper.GetBool("stats.enabled") {
-		stats.Setup()
-	}
-
 	if viper.GetBool("worker") {
 		go setupWorker(stream, database)
 	}
 
 	if viper.GetBool("master") {
-		go setupWebserver(stream, database)
+		go startGrpc(stream, database)
+		go startWeb(stream, database)
 	}
 
 	util.WaitForSigInt()
@@ -121,34 +121,39 @@ func setupQueue() (database.Stream, error) {
 	return nil, fmt.Errorf("no queue setup")
 }
 
-func setupWebserver(stream database.Stream, database database.Database) {
-	e = echo.New()
-	e.Logger.SetOutput(log.Logger)
+func startGrpc(stream database.Stream, database database.Database) {
+	lis, err := net.Listen("tcp", ":5309") // TODO: configure
+	if err != nil {
+		log.Panic().
+			Err(err).
+			Msg("error listening on gRPC port")
+	}
 
-	e.HideBanner = true
-
-	e.GET("/healthz", func(c echo.Context) error {
-		return c.String(200, "ok")
-	})
-
-	// Create our v1 API
-	v1 := api.New(&stream, &database)
-	v1.Register(e)
+	grpcServer := grpc.NewServer()
+	pb.RegisterV1Server(grpcServer, &pb.API{})
 	log.Info().
 		Int("port", 5309).
-		Msg("Started webserver, you're good to go!")
-	err := e.Start(":5309")
-	if strings.Contains(err.Error(), "Server closed") {
-		log.Info().
-			Msg("Server has shutdown.")
-		return
+		Msg("Started gRPC server, you're good to go!")
+
+	grpcServer.Serve(lis)
+}
+
+func startWeb(stream database.Stream, database database.Database) {
+	mux := runtime.NewServeMux()
+	err := pb.RegisterV1HandlerFromEndpoint(
+		context.Background(),
+		mux,
+		"localhost:5309", // TODO: configure
+		[]grpc.DialOption{grpc.WithInsecure()})
+
+	if err != nil {
+		log.Panic().
+			Err(err).
+			Msg("error setting up gRPC gateway")
 	}
-	log.Fatal().Err(err)
+	http.ListenAndServe(":8080", mux)
 }
 
-func stopWebserver() {
-
-}
 func setupLogging() {
 	// If we're in a terminal, pretty print
 	if terminal.IsTerminal(int(os.Stdout.Fd())) {

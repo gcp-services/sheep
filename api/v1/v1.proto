@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package sheep.api.v1;
+import "google/api/annotations.proto";
+
+option go_package = "github.com/Cidan/sheep/api/v1;v1";
+
+service V1 {
+  rpc Get(Counter) returns (Result) {
+    option (google.api.http) = {
+      get: "/v1/counter/{keyspace}/{key}/{name}"
+    };
+  }
+  rpc Update(Counter) returns (Result) {}
+  rpc Delete(Counter) returns (Result) {}
+}
+
+message Counter {
+  string keyspace = 1;
+  string key = 2;
+  string name = 3;
+  string uuid = 4;
+  enum Operation {
+    INCR = 0;
+    DECR = 1;
+    SET  = 2;
+  }
+  Operation operation = 5;
+  int64 value = 6;
+  bool direct = 7;
+}
+
+message Result {
+  int64 value = 1;
+  string error = 2;
+}

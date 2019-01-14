@@ -1,25 +1,18 @@
-build:
-	${GOPATH}/bin/statik -f -src=web/assets/dist
-	go build ./...
+
+build: gen-rpc
+	go build ./...; \
 	go install ./...
 
-web:
-	cd web/assets && npm run build
-	${GOPATH}/bin/statik -f -src=web/assets/dist
-
-test:
-	go vet ./...
+test: gen-rpc
+	go vet ./...; \
 	go test -covermode=atomic ./...
 
-demo:
-	${GOPATH}/bin/demo
-	
+gen-rpc:
+	protoc \
+	-I api/v1/ \
+	-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
+	api/v1/v1.proto --go_out=plugins=grpc:${GOPATH}/src --grpc-gateway_out=logtostderr=true:${GOPATH}/src
 run:
 	${GOPATH}/bin/sheep
 
-init:
-	go get github.com/rakyll/statik
-	mkdir -p web/assets/dist
-	cd web/assets && npm install
-
-.PHONY: test web
+.PHONY: test
