@@ -29,3 +29,4 @@ import:
   version: ~1.2.0
   subpackages:
   - protoc-gen-go
+  - proto
