@@ -140,11 +140,11 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 
 	// Now we'll do our operation.
 	switch msg.Operation {
-	case "incr":
+	case "INCR":
 		move++
-	case "decr":
+	case "DECR":
 		move--
-	case "set":
+	case "SET":
 		move = msg.Value
 	default:
 		return &spanner.Error{
@@ -156,7 +156,7 @@ func (s *Spanner) doSave(ctx context.Context, rw *spanner.ReadWriteTransaction) 
 	m := []*spanner.Mutation{}
 
 	log.Debug().Int("shard", shard).Msg("shard selected for op")
-	if msg.Operation == "set" {
+	if msg.Operation == "SET" {
 		for i := 0; i < shards; i++ {
 			m = append(m, spanner.InsertOrUpdate(
 				"sheep",

@@ -11,7 +11,13 @@ service V1 {
       get: "/v1/counter/{keyspace}/{key}/{name}"
     };
   }
-  rpc Update(Counter) returns (Result) {}
+  
+  rpc Update(Counter) returns (Result) {
+    option (google.api.http) = {
+      post: "/v1/counter/{keyspace}/{key}/{name}/{uuid}/{operation}"
+    };
+  }
+
   rpc Delete(Counter) returns (Result) {}
 }
 
