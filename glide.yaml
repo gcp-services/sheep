@@ -20,3 +20,12 @@ import:
   version: ~1.1.0
 - package: github.com/lib/pq
 - package: github.com/denisbrodbeck/machineid
+- package: github.com/grpc-ecosystem/grpc-gateway
+  version: ~1.6.4
+  subpackages:
+  - protoc-gen-grpc-gateway
+  - protoc-gen-swagger
+- package: github.com/golang/protobuf
+  version: ~1.2.0
+  subpackages:
+  - protoc-gen-go

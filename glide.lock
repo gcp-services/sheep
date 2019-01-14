@@ -1,5 +1,5 @@
-hash: fd51a5a222f5e352f3149fdbc94f6a1db9763c11ba51c792e97647cfdda38b1b
-updated: 2019-01-14T11:13:13.0764156-08:00
+hash: 565fbc2e6bf322c371524def7d14883582535a4e696888e38974ee01ced202c5
+updated: 2019-01-14T13:53:55.3677807-08:00
 imports:
 - name: cloud.google.com/go
   version: 2d3a6656c17a60b0815b7e06ab0be04eacb6e613
@@ -23,10 +23,11 @@ imports:
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/protobuf
-  version: 347cf4a86c1cb8d262994d8ef5924d4576c5b331
+  version: aa810b61a9c79d51363740d207bb46cf8e620ed5
   subpackages:
   - jsonpb
   - proto
+  - protoc-gen-go
   - protoc-gen-go/descriptor
   - protoc-gen-go/generator
   - protoc-gen-go/generator/internal/remap
@@ -43,8 +44,10 @@ imports:
   subpackages:
   - v2
 - name: github.com/grpc-ecosystem/grpc-gateway
-  version: 20e8cf9fb34a4c43782226b3e0dd42913a5c0a9b
+  version: ae4bb97e7718691c8e0742a7c07989c91630e042
   subpackages:
+  - protoc-gen-grpc-gateway
+  - protoc-gen-swagger
   - runtime
   - runtime/internal
   - utilities
