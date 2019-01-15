@@ -26,7 +26,7 @@ func TestSpannerSave(t *testing.T) {
 		Keyspace:  "test",
 		Key:       "test",
 		Name:      "some counter",
-		Operation: "set",
+		Operation: "SET",
 		Value:     0,
 	}
 
@@ -38,7 +38,7 @@ func TestSpannerSave(t *testing.T) {
 	assert.EqualValues(t, 0, msg.Value)
 
 	// Increment by 1 and read it back
-	msg.Operation = "incr"
+	msg.Operation = "INCR"
 	msg.UUID = uuid.NewV4().String()
 	err = sp.Save(msg)
 	assert.Nil(t, err)
@@ -47,7 +47,7 @@ func TestSpannerSave(t *testing.T) {
 	assert.EqualValues(t, 1, msg.Value)
 
 	// Decrement by 1
-	msg.Operation = "decr"
+	msg.Operation = "DECR"
 	msg.UUID = uuid.NewV4().String()
 	err = sp.Save(msg)
 	assert.Nil(t, err)
