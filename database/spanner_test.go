@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/Cidan/sheep/config"
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,9 +12,10 @@ func TestSetupSpanner(t *testing.T) {
 }
 
 func TestSpannerSave(t *testing.T) {
-	if !acc {
-		return
+	if testing.Short() {
+		t.Skip("skipping test in short mode.")
 	}
+
 	config.SetDefaults()
 	sp, err := NewSpanner("jinked-home", "sheep-test", "sheep")
 	assert.Nil(t, err)

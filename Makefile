@@ -5,6 +5,10 @@ build: gen-rpc
 
 test: gen-rpc
 	go vet ./...; \
+	go test -test.short -covermode=atomic ./...
+
+test_acc: gen-rpc
+	go vet ./...; \
 	go test -covermode=atomic ./...
 
 gen-rpc:
@@ -12,6 +16,7 @@ gen-rpc:
 	-I api/v1/ \
 	-Ivendor/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 	api/v1/v1.proto --go_out=plugins=grpc:${GOPATH}/src --grpc-gateway_out=logtostderr=true:${GOPATH}/src
+
 run:
 	${GOPATH}/bin/sheep
 

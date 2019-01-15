@@ -8,8 +8,8 @@ import (
 )
 
 func TestNewPubsub(t *testing.T) {
-	if !acc {
-		return
+	if testing.Short() {
+		t.Skip("skipping test in short mode.")
 	}
 	// The pubsub emulator doesn't support exists() checks it seems.
 	//os.Setenv("PUBSUB_EMULATOR_HOST", "localhost:8085")
@@ -18,8 +18,8 @@ func TestNewPubsub(t *testing.T) {
 }
 
 func TestPubsubSaveAndRead(t *testing.T) {
-	if !acc {
-		return
+	if testing.Short() {
+		t.Skip("skipping test in short mode.")
 	}
 	p, err := NewPubsub("jinked-home", "tests", "tests")
 	assert.Nil(t, err)

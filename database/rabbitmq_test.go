@@ -9,8 +9,8 @@ import (
 var rmq *RabbitMQ
 
 func TestSetupRabbitMQ(t *testing.T) {
-	if !acc {
-		return
+	if testing.Short() {
+		t.Skip("skipping test in short mode.")
 	}
 	r, err := NewRabbitMQ([]string{"amqp://localhost", "amqp://localhost"})
 	assert.Nil(t, err)
@@ -18,8 +18,8 @@ func TestSetupRabbitMQ(t *testing.T) {
 }
 
 func TestSave(t *testing.T) {
-	if !acc {
-		return
+	if testing.Short() {
+		t.Skip("skipping test in short mode.")
 	}
 	msg := &Message{}
 	rmq.Save(msg)
