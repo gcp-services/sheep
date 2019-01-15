@@ -24,6 +24,7 @@ func (a *API) Get(ctx context.Context, in *Counter) (*Result, error) {
 		Key:      in.GetKey(),
 		Name:     in.GetName(),
 	}
+
 	err := a.Database.Read(msg)
 	if err != nil {
 		if spanner.ErrCode(err) == codes.NotFound {

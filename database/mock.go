@@ -2,13 +2,18 @@ package database
 
 import (
 	"context"
+	"errors"
 	"sync"
+
+	"cloud.google.com/go/spanner"
+	"google.golang.org/grpc/codes"
 )
 
 type MockDatabase struct {
-	db   map[string]int64
-	log  map[string]bool
-	lock sync.Mutex
+	db     map[string]int64
+	exists map[string]bool
+	log    map[string]bool
+	lock   sync.Mutex
 }
 
 type MockQueue struct {
@@ -18,9 +23,10 @@ type MockQueue struct {
 
 func NewMockDatabase() (Database, error) {
 	return &MockDatabase{
-		db:   make(map[string]int64),
-		log:  make(map[string]bool),
-		lock: sync.Mutex{},
+		db:     make(map[string]int64),
+		exists: make(map[string]bool),
+		log:    make(map[string]bool),
+		lock:   sync.Mutex{},
 	}, nil
 }
 
@@ -39,12 +45,17 @@ func (db *MockDatabase) Save(m *Message) error {
 	key := m.Keyspace + m.Key + m.Name
 	db.log[m.UUID] = true
 	switch m.Operation {
-	case "incr":
+	case "INCR":
 		db.db[key]++
-	case "decr":
+		db.exists[key] = true
+	case "DECR":
 		db.db[key]--
-	case "set":
+		db.exists[key] = true
+	case "SET":
 		db.db[key] = m.Value
+		db.exists[key] = true
+	default:
+		return errors.New("invalid op")
 	}
 	return nil
 }
@@ -52,6 +63,9 @@ func (db *MockDatabase) Save(m *Message) error {
 func (db *MockDatabase) Read(m *Message) error {
 	db.lock.Lock()
 	defer db.lock.Unlock()
+	if !db.exists[m.Keyspace+m.Key+m.Name] {
+		return &spanner.Error{Code: codes.NotFound}
+	}
 	m.Value = db.db[m.Keyspace+m.Key+m.Name]
 	return nil
 }
