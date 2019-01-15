@@ -16,6 +16,8 @@ func SetDefaults() {
 	viper.SetDefault("master", true)
 	viper.SetDefault("worker", true)
 	viper.SetDefault("direct", false)
+	viper.SetDefault("service.port", 5309)
+	viper.SetDefault("service.rest", 8080)
 }
 
 func Setup(path string) {

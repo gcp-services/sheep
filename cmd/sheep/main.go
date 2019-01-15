@@ -122,7 +122,7 @@ func setupQueue() (database.Stream, error) {
 }
 
 func startGrpc(stream database.Stream, database database.Database) {
-	lis, err := net.Listen("tcp", ":5309") // TODO: configure
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", viper.GetInt("service.port")))
 	if err != nil {
 		log.Panic().
 			Err(err).
@@ -135,7 +135,7 @@ func startGrpc(stream database.Stream, database database.Database) {
 		Database: database,
 	})
 	log.Info().
-		Int("port", 5309).
+		Int("port", viper.GetInt("service.port")).
 		Msg("Started gRPC server, you're good to go!")
 
 	grpcServer.Serve(lis)
@@ -146,7 +146,7 @@ func startWeb(stream database.Stream, database database.Database) {
 	err := pb.RegisterV1HandlerFromEndpoint(
 		context.Background(),
 		mux,
-		"localhost:5309", // TODO: configure
+		fmt.Sprintf("localhost:%d", viper.GetInt("service.port")),
 		[]grpc.DialOption{grpc.WithInsecure()})
 
 	if err != nil {
@@ -154,7 +154,7 @@ func startWeb(stream database.Stream, database database.Database) {
 			Err(err).
 			Msg("error setting up gRPC gateway")
 	}
-	http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(fmt.Sprintf(":%d", viper.GetInt("service.rest")), mux)
 }
 
 func setupLogging() {
