@@ -14,10 +14,10 @@ func TestSetupLogging(t *testing.T) {
 }
 func TestStartGrpc(t *testing.T) {
 	config.Setup("")
-	db, err := database.NewMockDatabase()
+	db, err := database.NewMockDatabase(false)
 	assert.Nil(t, err)
 
-	stream, err := database.NewMockQueue()
+	stream, err := database.NewMockQueue(false)
 	assert.Nil(t, err)
 
 	go startGrpc(stream, db)
@@ -26,12 +26,12 @@ func TestStartGrpc(t *testing.T) {
 
 func TestSetupDatabase(t *testing.T) {
 	config.Setup("")
-	_, err := database.NewMockDatabase()
+	_, err := database.NewMockDatabase(false)
 	assert.Nil(t, err)
 }
 
 func TestSetupQueue(t *testing.T) {
 	config.Setup("")
-	_, err := database.NewMockQueue()
+	_, err := database.NewMockQueue(false)
 	assert.Nil(t, err)
 }
