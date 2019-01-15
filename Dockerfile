@@ -27,3 +27,7 @@ go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger && \
 go install ./vendor/github.com/golang/protobuf/protoc-gen-go/ # silly
 
 RUN make && make test
+
+FROM debian:9-slim
+COPY --from=0 /go/bin/sheep /sheep
+CMD ["/sheep"]
