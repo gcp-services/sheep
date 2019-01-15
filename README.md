@@ -37,13 +37,11 @@ The API looks like this:
 
 ```
 # Get a counter value
-curl "localhost:5309/v1/get?keyspace=test&key=test&name=some%20counter"
+curl "localhost:8080/v1/counter/{keyspace}/{key}/{name}"
 
 # Increment a counter
-curl -X PUT -H "Content-Type: application/json" "localhost:5309/v1/incr" -d \ 
-  '{"UUID": "aabbcc", "Keyspace": "users", "Key": "some-user-id", "Name": "counter-name"}'
+curl -X POST "localhost:8080/v1/counter/someKeyspace/someKey/someCounterName/aa-bb-cc-dd-uuid/INCR"
 
 # Decrement a counter
-curl -X PUT -H "Content-Type: application/json" "localhost:5309/v1/decr" -d \ 
-  '{"UUID": "aabbcc", "Keyspace": "users", "Key": "some-user-id", "Name": "counter-name"}'
+curl -X POST "localhost:8080/v1/counter/someKeyspace/someKey/someCounterName/aa-bb-cc-dd-uuid/DECR"
 ```
