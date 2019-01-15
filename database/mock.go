@@ -10,33 +10,41 @@ import (
 )
 
 type MockDatabase struct {
-	db     map[string]int64
-	exists map[string]bool
-	log    map[string]bool
-	lock   sync.Mutex
+	ForceError bool
+	db         map[string]int64
+	exists     map[string]bool
+	log        map[string]bool
+	lock       sync.Mutex
 }
 
 type MockQueue struct {
-	queue []*Message
-	c     chan bool
+	ForceError bool
+	queue      []*Message
+	c          chan bool
 }
 
-func NewMockDatabase() (Database, error) {
+func NewMockDatabase(forceError bool) (Database, error) {
 	return &MockDatabase{
-		db:     make(map[string]int64),
-		exists: make(map[string]bool),
-		log:    make(map[string]bool),
-		lock:   sync.Mutex{},
+		ForceError: forceError,
+		db:         make(map[string]int64),
+		exists:     make(map[string]bool),
+		log:        make(map[string]bool),
+		lock:       sync.Mutex{},
 	}, nil
 }
 
-func NewMockQueue() (Stream, error) {
+func NewMockQueue(forceError bool) (Stream, error) {
 	return &MockQueue{
-		c: make(chan bool),
+		ForceError: forceError,
+		c:          make(chan bool),
 	}, nil
 }
 
 func (db *MockDatabase) Save(m *Message) error {
+	if db.ForceError {
+		return db.SaveError(m)
+	}
+
 	db.lock.Lock()
 	defer db.lock.Unlock()
 	if db.log[m.UUID] {
@@ -61,6 +69,9 @@ func (db *MockDatabase) Save(m *Message) error {
 }
 
 func (db *MockDatabase) Read(m *Message) error {
+	if db.ForceError {
+		return db.ReadError(m)
+	}
 	db.lock.Lock()
 	defer db.lock.Unlock()
 	if !db.exists[m.Keyspace+m.Key+m.Name] {
@@ -70,13 +81,27 @@ func (db *MockDatabase) Read(m *Message) error {
 	return nil
 }
 
+func (db *MockDatabase) SaveError(m *Message) error {
+	return &spanner.Error{Code: codes.Internal}
+}
+
+func (db *MockDatabase) ReadError(m *Message) error {
+	return &spanner.Error{Code: codes.Internal}
+}
+
 func (q *MockQueue) Save(m *Message) error {
+	if q.ForceError {
+		q.SaveError(m)
+	}
 	q.queue = append(q.queue, m)
 	q.c <- true
 	return nil
 }
 
 func (q *MockQueue) Read(ctx context.Context, fn MessageFn) error {
+	if q.ForceError {
+		return q.ReadError(ctx, fn)
+	}
 	select {
 	case <-q.c:
 		go func() {
@@ -89,6 +114,14 @@ func (q *MockQueue) Read(ctx context.Context, fn MessageFn) error {
 		}()
 	}
 	return nil
+}
+
+func (q *MockQueue) SaveError(m *Message) error {
+	return &spanner.Error{Code: codes.Internal}
+}
+
+func (q *MockQueue) ReadError(ctx context.Context, fn MessageFn) error {
+	return &spanner.Error{Code: codes.Internal}
 }
 
 // TODO: implement cancel channel
