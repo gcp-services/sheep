@@ -50,8 +50,10 @@ func (db *MockDatabase) Save(m *Message) error {
 	if db.log[m.UUID] {
 		return nil
 	}
-	key := m.Keyspace + m.Key + m.Name
 	db.log[m.UUID] = true
+
+	key := m.Keyspace + m.Key + m.Name
+
 	switch m.Operation {
 	case "INCR":
 		db.db[key]++
@@ -65,6 +67,7 @@ func (db *MockDatabase) Save(m *Message) error {
 	default:
 		return errors.New("invalid op")
 	}
+
 	return nil
 }
 
