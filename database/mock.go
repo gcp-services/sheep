@@ -94,7 +94,7 @@ func (db *MockDatabase) ReadError(m *Message) error {
 
 func (q *MockQueue) Save(m *Message) error {
 	if q.ForceError {
-		q.SaveError(m)
+		return q.SaveError(m)
 	}
 	q.queue = append(q.queue, m)
 	q.c <- true

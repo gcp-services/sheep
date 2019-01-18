@@ -2,6 +2,7 @@ package database
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -89,6 +90,7 @@ func TestMockDatabaseRead(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, db)
 	msg := &Message{}
+
 	// Test Read Not Found
 	err = db.Read(msg)
 	assert.Error(t, err)
@@ -102,6 +104,59 @@ func TestMockDatabaseRead(t *testing.T) {
 	// Test Read
 	err = db.Save(msg)
 	assert.Nil(t, err)
+	err = db.Read(msg)
+	assert.Nil(t, err)
+	assert.Equal(t, int64(1), msg.Value)
+}
+
+func TestMockQueueSaveError(t *testing.T) {
+	q, err := NewMockQueue(true)
+	assert.Nil(t, err)
+	assert.NotNil(t, q)
+
+	db, err := NewMockDatabase(false)
+	assert.Nil(t, err)
+	assert.NotNil(t, db)
+	q.StartWork(db)
+	err = q.Save(&Message{})
+	assert.Error(t, err)
+
+	q, err = NewMockQueue(false)
+	assert.Nil(t, err)
+	assert.NotNil(t, q)
+
+	db, err = NewMockDatabase(true)
+	assert.Nil(t, err)
+	assert.NotNil(t, db)
+	q.StartWork(db)
+	err = q.Save(&Message{})
+	assert.Nil(t, err)
+}
+
+func TestMockQueueSave(t *testing.T) {
+	q, err := NewMockQueue(false)
+	assert.Nil(t, err)
+	assert.NotNil(t, q)
+
+	db, err := NewMockDatabase(false)
+	assert.Nil(t, err)
+	assert.NotNil(t, db)
+
+	q.StartWork(db)
+
+	msg := &Message{
+		Keyspace:  "test",
+		Key:       "test",
+		Name:      "test",
+		Operation: "INCR",
+		UUID:      "1",
+	}
+
+	err = q.Save(msg)
+	assert.Nil(t, err)
+
+	time.Sleep(time.Second * 2)
+
 	err = db.Read(msg)
 	assert.Nil(t, err)
 	assert.Equal(t, int64(1), msg.Value)
