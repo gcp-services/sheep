@@ -3,7 +3,7 @@ syntax = "proto3";
 package sheep.api.v1;
 import "google/api/annotations.proto";
 
-option go_package = "github.com/Cidan/sheep/api/v1;v1";
+option go_package = "api/v1;v1";
 
 service V1 {
   rpc Get(Counter) returns (Result) {
