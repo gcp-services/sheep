@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	cloud.google.com/go v0.46.3
+	cloud.google.com/go/bigtable v1.0.0
 	cloud.google.com/go/pubsub v1.0.1
 	cloud.google.com/go/spanner v1.0.0
 	git.apache.org/thrift.git v0.0.0-20181218151757-9b75e4fe745a // indirect
