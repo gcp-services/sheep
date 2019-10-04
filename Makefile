@@ -11,6 +11,11 @@ test_acc: gen-rpc
 	go vet ./...; \
 	go test -covermode=atomic ./...
 
+init:
+	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway@v1.8.5
+	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
+	go get -u github.com/golang/protobuf/protoc-gen-go
+
 gen-rpc:
 	protoc \
 	-I api/v1/ \
