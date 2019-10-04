@@ -1,4 +1,4 @@
-package database
+package pubsub
 
 import (
 	"bytes"
@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"cloud.google.com/go/pubsub"
+	"github.com/Cidan/sheep/database"
 )
 
 type Pubsub struct {
@@ -16,7 +17,7 @@ type Pubsub struct {
 }
 
 // SetupPubsub global client
-func NewPubsub(project, topic, subscription string) (*Pubsub, error) {
+func New(project, topic, subscription string) (database.Stream, error) {
 	client, err := pubsub.NewClient(context.Background(), project)
 
 	if err != nil {
@@ -66,13 +67,13 @@ func NewPubsub(project, topic, subscription string) (*Pubsub, error) {
 	}, nil
 }
 
-func (p *Pubsub) Read(rctx context.Context, cb MessageFn) error {
+func (p *Pubsub) Read(rctx context.Context, cb database.MessageFn) error {
 
 	// Use a callback to fire a message up the ladder to the caller
 	// and the caller returns an ack/nack response.
 	return p.subscription.Receive(rctx, func(ctx context.Context, msg *pubsub.Message) {
 		// Decode our message
-		var message Message
+		var message database.Message
 		var b bytes.Buffer
 		b.Write(msg.Data)
 		d := gob.NewDecoder(&b)
@@ -86,7 +87,7 @@ func (p *Pubsub) Read(rctx context.Context, cb MessageFn) error {
 	})
 }
 
-func (p *Pubsub) Save(message *Message) error {
+func (p *Pubsub) Save(message *database.Message) error {
 	var b bytes.Buffer
 	e := gob.NewEncoder(&b)
 	err := e.Encode(message)
@@ -106,7 +107,7 @@ func (p *Pubsub) Save(message *Message) error {
 	return nil
 }
 
-func (p *Pubsub) StartWork(db Database) {
+func (p *Pubsub) StartWork(db database.Database) {
 
 }
 

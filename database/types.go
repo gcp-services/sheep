@@ -28,4 +28,4 @@ type Message struct {
 
 type MessageFn func(*Message) bool
 
-type contextKey string
+type ContextKey string

@@ -1,9 +1,10 @@
-package database
+package rabbitmq
 
 import (
 	"encoding/json"
 	"time"
 
+	"github.com/Cidan/sheep/database"
 	"github.com/rs/zerolog/log"
 	"github.com/streadway/amqp"
 )
@@ -32,11 +33,11 @@ func NewRabbitMQ(hosts []string) (*RabbitMQ, error) {
 }
 
 // Create a channel for reading from RabbitMQ
-func (r *RabbitMQ) Read() (chan *Message, error) {
+func (r *RabbitMQ) Read() (chan *database.Message, error) {
 	return nil, nil
 }
 
-func (r *RabbitMQ) Save(message *Message) error {
+func (r *RabbitMQ) Save(message *database.Message) error {
 	data, err := json.Marshal(&message)
 	if err != nil {
 		return err
@@ -53,7 +54,7 @@ func (r *RabbitMQ) Save(message *Message) error {
 	return r.connections[0].Channels[0].Channel.TxCommit()
 }
 
-func (r *RabbitMQ) StartWork(db Database) {
+func (r *RabbitMQ) StartWork(db database.Database) {
 
 }
 

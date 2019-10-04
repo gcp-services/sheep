@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/Cidan/sheep/database"
+	"github.com/Cidan/sheep/database/mock"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,7 +15,7 @@ func TestGetWithNotFound(t *testing.T) {
 		Name:     "test",
 	}
 
-	db, err := database.NewMockDatabase(false)
+	db, err := mock.NewMockDatabase(false)
 	assert.Nil(t, err)
 	api := &API{
 		Database: db,
@@ -35,7 +35,7 @@ func TestGetDirect(t *testing.T) {
 		Operation: Counter_INCR,
 		Direct:    true,
 	}
-	db, err := database.NewMockDatabase(false)
+	db, err := mock.NewMockDatabase(false)
 	assert.Nil(t, err)
 	api := &API{
 		Database: db,
@@ -59,10 +59,10 @@ func TestGetStream(t *testing.T) {
 		Direct:    false,
 	}
 
-	db, err := database.NewMockDatabase(false)
+	db, err := mock.NewMockDatabase(false)
 	assert.Nil(t, err)
 
-	stream, err := database.NewMockQueue(false)
+	stream, err := mock.NewMockQueue(false)
 	assert.Nil(t, err)
 
 	stream.StartWork(db)
@@ -91,10 +91,10 @@ func TestGetError(t *testing.T) {
 		Direct:    false,
 	}
 
-	db, err := database.NewMockDatabase(true)
+	db, err := mock.NewMockDatabase(true)
 	assert.Nil(t, err)
 
-	stream, err := database.NewMockQueue(false)
+	stream, err := mock.NewMockQueue(false)
 	assert.Nil(t, err)
 
 	stream.StartWork(db)
@@ -121,7 +121,7 @@ func TestUpdateError(t *testing.T) {
 		Direct:    true,
 	}
 
-	db, err := database.NewMockDatabase(true)
+	db, err := mock.NewMockDatabase(true)
 	assert.Nil(t, err)
 
 	api := &API{

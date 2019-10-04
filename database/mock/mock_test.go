@@ -1,9 +1,10 @@
-package database
+package mock
 
 import (
 	"testing"
 	"time"
 
+	"github.com/Cidan/sheep/database"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,13 +24,13 @@ func TestMockDatabaseSaveError(t *testing.T) {
 	db, err := NewMockDatabase(true)
 	assert.Nil(t, err)
 	assert.NotNil(t, db)
-	err = db.Save(&Message{})
+	err = db.Save(&database.Message{})
 	assert.Error(t, err)
 }
 
 func TestMockDatabaseSave(t *testing.T) {
 	db, err := NewMockDatabase(false)
-	msg := &Message{
+	msg := &database.Message{
 		UUID:     "1",
 		Keyspace: "test",
 		Key:      "test",
@@ -81,7 +82,7 @@ func TestMockDatabaseReadError(t *testing.T) {
 	db, err := NewMockDatabase(true)
 	assert.Nil(t, err)
 	assert.NotNil(t, db)
-	err = db.Read(&Message{})
+	err = db.Read(&database.Message{})
 	assert.Error(t, err)
 }
 
@@ -89,7 +90,7 @@ func TestMockDatabaseRead(t *testing.T) {
 	db, err := NewMockDatabase(false)
 	assert.Nil(t, err)
 	assert.NotNil(t, db)
-	msg := &Message{}
+	msg := &database.Message{}
 
 	// Test Read Not Found
 	err = db.Read(msg)
@@ -118,7 +119,7 @@ func TestMockQueueSaveError(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, db)
 	q.StartWork(db)
-	err = q.Save(&Message{})
+	err = q.Save(&database.Message{})
 	assert.Error(t, err)
 
 	q, err = NewMockQueue(false)
@@ -129,7 +130,7 @@ func TestMockQueueSaveError(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, db)
 	q.StartWork(db)
-	err = q.Save(&Message{})
+	err = q.Save(&database.Message{})
 	assert.Nil(t, err)
 }
 
@@ -144,7 +145,7 @@ func TestMockQueueSave(t *testing.T) {
 
 	q.StartWork(db)
 
-	msg := &Message{
+	msg := &database.Message{
 		Keyspace:  "test",
 		Key:       "test",
 		Name:      "test",

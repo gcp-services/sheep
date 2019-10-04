@@ -1,4 +1,4 @@
-package database
+package mock
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"cloud.google.com/go/spanner"
+	"github.com/Cidan/sheep/database"
 	"google.golang.org/grpc/codes"
 )
 
@@ -19,11 +20,11 @@ type MockDatabase struct {
 
 type MockQueue struct {
 	ForceError bool
-	queue      []*Message
+	queue      []*database.Message
 	c          chan bool
 }
 
-func NewMockDatabase(forceError bool) (Database, error) {
+func NewMockDatabase(forceError bool) (database.Database, error) {
 	return &MockDatabase{
 		ForceError: forceError,
 		db:         make(map[string]int64),
@@ -33,14 +34,14 @@ func NewMockDatabase(forceError bool) (Database, error) {
 	}, nil
 }
 
-func NewMockQueue(forceError bool) (Stream, error) {
+func NewMockQueue(forceError bool) (database.Stream, error) {
 	return &MockQueue{
 		ForceError: forceError,
 		c:          make(chan bool),
 	}, nil
 }
 
-func (db *MockDatabase) Save(m *Message) error {
+func (db *MockDatabase) Save(m *database.Message) error {
 	if db.ForceError {
 		return db.SaveError(m)
 	}
@@ -71,7 +72,7 @@ func (db *MockDatabase) Save(m *Message) error {
 	return nil
 }
 
-func (db *MockDatabase) Read(m *Message) error {
+func (db *MockDatabase) Read(m *database.Message) error {
 	if db.ForceError {
 		return db.ReadError(m)
 	}
@@ -84,15 +85,15 @@ func (db *MockDatabase) Read(m *Message) error {
 	return nil
 }
 
-func (db *MockDatabase) SaveError(m *Message) error {
+func (db *MockDatabase) SaveError(m *database.Message) error {
 	return &spanner.Error{Code: codes.Internal}
 }
 
-func (db *MockDatabase) ReadError(m *Message) error {
+func (db *MockDatabase) ReadError(m *database.Message) error {
 	return &spanner.Error{Code: codes.Internal}
 }
 
-func (q *MockQueue) Save(m *Message) error {
+func (q *MockQueue) Save(m *database.Message) error {
 	if q.ForceError {
 		return q.SaveError(m)
 	}
@@ -101,14 +102,14 @@ func (q *MockQueue) Save(m *Message) error {
 	return nil
 }
 
-func (q *MockQueue) Read(ctx context.Context, fn MessageFn) error {
+func (q *MockQueue) Read(ctx context.Context, fn database.MessageFn) error {
 	if q.ForceError {
 		return q.ReadError(ctx, fn)
 	}
 	select {
 	case <-q.c:
 		go func() {
-			var m *Message
+			var m *database.Message
 			m, q.queue = q.queue[0], q.queue[1:]
 			ok := fn(m)
 			if !ok {
@@ -119,17 +120,17 @@ func (q *MockQueue) Read(ctx context.Context, fn MessageFn) error {
 	return nil
 }
 
-func (q *MockQueue) SaveError(m *Message) error {
+func (q *MockQueue) SaveError(m *database.Message) error {
 	return &spanner.Error{Code: codes.Internal}
 }
 
-func (q *MockQueue) ReadError(ctx context.Context, fn MessageFn) error {
+func (q *MockQueue) ReadError(ctx context.Context, fn database.MessageFn) error {
 	return &spanner.Error{Code: codes.Internal}
 }
 
 // TODO: implement cancel channel
-func (q *MockQueue) StartWork(db Database) {
-	go q.Read(context.Background(), func(msg *Message) bool {
+func (q *MockQueue) StartWork(db database.Database) {
+	go q.Read(context.Background(), func(msg *database.Message) bool {
 		err := db.Save(msg)
 		if err != nil {
 			return false

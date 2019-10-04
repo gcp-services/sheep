@@ -1,9 +1,10 @@
-package database
+package spanner
 
 import (
 	"testing"
 
 	"github.com/Cidan/sheep/config"
+	"github.com/Cidan/sheep/database"
 	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/assert"
 )
@@ -17,11 +18,11 @@ func TestSpannerSave(t *testing.T) {
 	}
 
 	config.SetDefaults()
-	sp, err := NewSpanner("jinked-home", "sheep-test", "sheep")
+	sp, err := New("jinked-home", "sheep-test", "sheep")
 	assert.Nil(t, err)
 
 	// Create a message
-	msg := &Message{
+	msg := &database.Message{
 		UUID:      uuid.NewV4().String(),
 		Keyspace:  "test",
 		Key:       "test",
@@ -62,7 +63,7 @@ func TestSpannerSave(t *testing.T) {
 	assert.NotNil(t, err)
 
 	// Missing fields should error
-	err = sp.Save(&Message{})
+	err = sp.Save(&database.Message{})
 	assert.NotNil(t, err)
 
 }

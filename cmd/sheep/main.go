@@ -13,6 +13,8 @@ import (
 
 	"github.com/Cidan/sheep/config"
 	"github.com/Cidan/sheep/database"
+	pubsub "github.com/Cidan/sheep/database/pubsub"
+	spanner "github.com/Cidan/sheep/database/spanner"
 	"github.com/Cidan/sheep/util"
 	"github.com/labstack/echo"
 	"github.com/rs/zerolog"
@@ -89,7 +91,7 @@ func setupDatabase() (database.Database, error) {
 
 	if viper.GetBool("spanner.enabled") {
 		log.Info().Msg("Setting up Spanner connection and schema")
-		return database.NewSpanner(
+		return spanner.New(
 			viper.GetString("spanner.project"),
 			viper.GetString("spanner.instance"),
 			viper.GetString("spanner.database"),
@@ -111,7 +113,7 @@ func setupQueue() (database.Stream, error) {
 
 	if viper.GetBool("pubsub.enabled") {
 		log.Info().Msg("Setting up Pub/Sub connection, topic, and subscription")
-		return database.NewPubsub(
+		return pubsub.New(
 			viper.GetString("pubsub.project"),
 			viper.GetString("pubsub.topic"),
 			viper.GetString("pubsub.subscription"),

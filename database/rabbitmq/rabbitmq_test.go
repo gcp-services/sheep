@@ -1,8 +1,9 @@
-package database
+package rabbitmq
 
 import (
 	"testing"
 
+	"github.com/Cidan/sheep/database"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,7 +22,7 @@ func TestSave(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping test in short mode.")
 	}
-	msg := &Message{}
+	msg := &database.Message{}
 	rmq.Save(msg)
 
 }
