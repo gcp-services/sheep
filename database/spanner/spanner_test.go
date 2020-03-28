@@ -5,20 +5,26 @@ import (
 
 	"github.com/Cidan/sheep/config"
 	"github.com/Cidan/sheep/database"
+	"github.com/gcpug/handy-spanner/fake"
 	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/api/option"
 )
 
+func SetupFake() {
+
+}
 func TestSetupSpanner(t *testing.T) {
 }
 
 func TestSpannerSave(t *testing.T) {
-	if testing.Short() {
-		t.Skip("skipping test in short mode.")
-	}
+
+	srv, conn, err := fake.Run()
+	assert.Nil(t, err)
+	assert.NotNil(t, srv)
 
 	config.SetDefaults()
-	sp, err := New("jinked-home", "sheep-test", "sheep")
+	sp, err := New("jinked-home", "sheep-test", "sheep", option.WithGRPCConn(conn))
 	assert.Nil(t, err)
 
 	// Create a message

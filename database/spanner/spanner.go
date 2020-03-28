@@ -12,6 +12,7 @@ import (
 	"github.com/Cidan/sheep/stats"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
+	"google.golang.org/api/option"
 	adminpb "google.golang.org/genproto/googleapis/spanner/admin/database/v1"
 	"google.golang.org/grpc/codes"
 )
@@ -22,11 +23,11 @@ type Spanner struct {
 }
 
 // SetupSpanner initializes the spanner clients.
-func New(project, instance, db string) (database.Database, error) {
+func New(project, instance, db string, opts ...option.ClientOption) (database.Database, error) {
 	ctx := context.Background()
 	sp := &Spanner{}
 
-	adminClient, err := spannerAdmin.NewDatabaseAdminClient(ctx)
+	adminClient, err := spannerAdmin.NewDatabaseAdminClient(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +46,7 @@ func New(project, instance, db string) (database.Database, error) {
 		instance,
 		db)
 
-	client, err := spannerClient.NewClient(context.Background(), dbstr)
+	client, err := spannerClient.NewClient(context.Background(), dbstr, opts...)
 	if err != nil {
 		return nil, err
 	}
